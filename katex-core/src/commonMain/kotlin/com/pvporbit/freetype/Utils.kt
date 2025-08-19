@@ -66,4 +66,4 @@ internal object Utils {
 
 }
 
-expect fun readAssetFile(path: String): ByteArray
+internal expect fun readAssetFile(path: String): ByteArray
