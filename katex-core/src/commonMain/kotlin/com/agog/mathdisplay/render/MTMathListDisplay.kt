@@ -19,10 +19,10 @@ data class CGPoint(
 )
 
 data class CGRect(
-    var x: Float = 0.0f,
-    var y: Float = 0.0f,
-    var width: Float = 0.0f,
-    var height: Float = 0.0f
+    val x: Float = 0.0f,
+    val y: Float = 0.0f,
+    val width: Float = 0.0f,
+    val height: Float = 0.0f
 )
 
 open class MTDisplay(

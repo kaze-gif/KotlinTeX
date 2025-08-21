@@ -8,14 +8,14 @@ import com.agog.mathdisplay.render.MTInterElementSpaceType.*
 
 
 // Delimiter shortfall from plain.tex
-const val kDelimiterFactor = 901
-const val kDelimiterShortfallPoints = 5
+internal const val kDelimiterFactor = 901
+internal const val kDelimiterShortfallPoints = 5
 
 
-const val kBaseLineSkipMultiplier = 1.2f  // default base line stretch is 12 pt for 10pt font.
-const val kLineSkipMultiplier = 0.1f  // default is 1pt for 10pt font.
-const val kLineSkipLimitMultiplier = 0.0f
-const val kJotMultiplier = 0.3f // A jot is 3pt for a 10pt font.
+internal const val kBaseLineSkipMultiplier = 1.2f  // default base line stretch is 12 pt for 10pt font.
+internal const val kLineSkipMultiplier = 0.1f  // default is 1pt for 10pt font.
+internal const val kLineSkipLimitMultiplier = 0.0f
+internal const val kJotMultiplier = 0.3f // A jot is 3pt for a 10pt font.
 
 
 class MTTypesetter(
@@ -75,8 +75,8 @@ class MTTypesetter(
             val typesetter = MTTypesetter(font, style, cramped, spaced)
             typesetter.createDisplayAtoms(preprocessedAtoms)
             val lastAtom = mathList.atoms.lastOrNull()
-            val maxrange = lastAtom?.indexRange?.maxRange ?: 0
-            val line = MTMathListDisplay(typesetter.displayAtoms, NSRange(0, maxrange))
+            val maxRange = lastAtom?.indexRange?.maxRange ?: 0
+            val line = MTMathListDisplay(typesetter.displayAtoms, NSRange(0, maxRange))
             return line
         }
 
@@ -144,11 +144,11 @@ class MTTypesetter(
     }
 
     private fun createDisplayAtoms(preprocessed: List<MTMathAtom>) {
-        // items should contain all the nodes that need to be layed out.
+        // items should contain all the nodes that need to be laid out.
         // convert to a list of MTDisplayAtoms
         var prevNode: MTMathAtom? = null
         var lastType: MTMathAtomType = KMTMathAtomNone
-        outerloop@ for (atom in preprocessed) {
+        outerLoop@ for (atom in preprocessed) {
             when (atom.type) {
                 KMTMathAtomNone -> {
                 }
@@ -157,7 +157,7 @@ class MTTypesetter(
                     "These types should never show here as they are removed by preprocessing"
                 )
 
-                KMTMathAtomBoundary -> throw MathDisplayException("A boundary atom should never be inside a mathlist.")
+                KMTMathAtomBoundary -> throw MathDisplayException("A boundary atom should never be inside a math list.")
 
                 KMTMathAtomSpace -> {
                     // stash the existing layout
@@ -170,7 +170,7 @@ class MTTypesetter(
                     // Since this is extra space, the desired interelement space between the prevAtom
                     // and the next node is still preserved. To avoid resetting the prevAtom and lastType
                     // we skip to the next node.
-                    continue@outerloop
+                    continue@outerLoop
                 }
 
                 KMTMathAtomStyle -> {
@@ -182,7 +182,7 @@ class MTTypesetter(
                     this.style = style.style
                     // We need to preserve the prevNode for any interelement space changes.
                     // so we skip to the next node.
-                    continue@outerloop
+                    continue@outerLoop
                 }
 
                 KMTMathAtomColor -> {
@@ -523,10 +523,10 @@ class MTTypesetter(
         val spaceType = spaceArray[rightIndex]
         if (spaceType == KMTSpaceInvalid) throw MathDisplayException("Invalid space between $left and $right")
 
-        val spaceMultipler = this.getSpacingInMu(spaceType)
-        if (spaceMultipler > 0) {
-            // 1 em = size of font in pt. space multipler is in multiples mu or 1/18 em
-            return spaceMultipler * styleFont.mathTable.muUnit()
+        val spaceMultiple = this.getSpacingInMu(spaceType)
+        if (spaceMultiple > 0) {
+            // 1 em = size of font in pt. space multiple is in multiples mu or 1/18 em
+            return spaceMultiple * styleFont.mathTable.muUnit()
         }
         return 0.0f
     }
@@ -633,7 +633,7 @@ class MTTypesetter(
         val subSuperScriptGap: Float =
             (superScriptShiftUp - superScript.descent) + (subscriptShiftDown - subScript.ascent)
         if (subSuperScriptGap < styleFont.mathTable.subSuperscriptGapMin) {
-            // Set the gap to atleast as much
+            // Set the gap to at least as much
             subscriptShiftDown += styleFont.mathTable.subSuperscriptGapMin - subSuperScriptGap
             val superscriptBottomDelta: Float =
                 styleFont.mathTable.superscriptBottomMaxWithSubscript - (superScriptShiftUp - superScript.descent)
@@ -880,7 +880,7 @@ class MTTypesetter(
         // Open type math makes no such assumption, and ascent and descent are independent of the thickness.
         // Latex computes delta as descent - (h(inner) + d(inner) + clearance)
         // but since we may not have ascent == thickness, we modify the delta calculation slightly.
-        // If the font designer followes Latex conventions, it will be identical.
+        // If the font designer follows Latex conventions, it will be identical.
         val delta =
             (glyph.descent + glyph.ascent) - (innerDisplay.ascent + innerDisplay.descent + clearance + radicalRuleThickness)
         if (delta > 0) {
@@ -955,7 +955,7 @@ class MTTypesetter(
         val display = MTGlyphConstructionDisplay(glyphs, offsets, styleFont)
         display.width = advances[0] // width of first glyph
         display.ascent = height
-        display.descent = 0.0f   // it's upto the rendering to adjust the display up or down.
+        display.descent = 0.0f   // it's up to the rendering to adjust the display up or down.
         return display
     }
 
@@ -971,7 +971,7 @@ class MTTypesetter(
             var prev: MTGlyphPart? = null
             val minDistance = styleFont.mathTable.minConnectorOverlap
             var minOffset = 0.0f
-            var maxDelta = 1000000.0f // large flost
+            var maxDelta = 1000000.0f // large float
             glyphs.clear()
             offsets.clear()
 
@@ -1144,7 +1144,7 @@ class MTTypesetter(
         // delta is the max distance from the axis
         val delta =
             maxOf(innerListDisplay.ascent - axisHeight, innerListDisplay.descent + axisHeight)
-        val d1 = (delta / 500.0f) * kDelimiterFactor  // This represents atleast 90% of the formula
+        val d1 = (delta / 500.0f) * kDelimiterFactor  // This represents at least 90% of the formula
         val d2 = 2.0f * delta - kDelimiterShortfallPoints  // This represents a shortfall of 5pt
         // The size of the delimiter glyph should cover at least 90% of the formula or
         // be at most 5pt short.
@@ -1241,7 +1241,7 @@ class MTTypesetter(
 
     // Accents
 
-    private fun isSingleCharAccentee(accent: MTAccent): Boolean {
+    private fun isSingleCharAccent(accent: MTAccent): Boolean {
         if (accent.innerList != null) {
 
             if (accent.innerList!!.atoms.count() != 1) {
@@ -1269,7 +1269,7 @@ class MTTypesetter(
         }
         val accentAdjustment = styleFont.mathTable.getTopAccentAdjustment(accentGlyph.gid)
         var accenteeAdjustment = 0.0f
-        if (!this.isSingleCharAccentee(accent)) {
+        if (!this.isSingleCharAccent(accent)) {
             // use the center of the accentee
             accenteeAdjustment = accenteeWidth / 2
         } else if (accent.innerList != null) {
@@ -1345,7 +1345,7 @@ class MTTypesetter(
             accentGlyphDisplay.width = accentGlyph.glyphWidth
             accentGlyphDisplay.position = accentPosition
 
-            if (this.isSingleCharAccentee(accent) && (accent.subScript != null || accent.superScript != null)) {
+            if (this.isSingleCharAccent(accent) && (accent.subScript != null || accent.superScript != null)) {
                 // Attach the super/subscripts to the accentee instead of the accent.
                 val innerAtom = accent.innerList!!.atoms[0]
                 innerAtom.superScript = accent.superScript
@@ -1376,8 +1376,8 @@ class MTTypesetter(
         val numColumns = table.numColumns()
         if (numColumns == 0 || table.numRows() == 0) {
             // Empty table
-            val emptylist = List(0) { MTDisplay() }
-            return MTMathListDisplay(emptylist, table.indexRange)
+            val emptyDisplays = List(0) { MTDisplay() }
+            return MTMathListDisplay(emptyDisplays, table.indexRange)
         }
 
         val columnWidths = Array(numColumns) { 0.0f }
@@ -1409,9 +1409,9 @@ class MTTypesetter(
             val colDisplays = Array(row.count()) { MTDisplay() }
             displays[r] = colDisplays
             for (i in 0 until row.count()) {
-                val disp: MTDisplay? = createLineForMathList(row[i], font, style, false)
-                columnWidths[i] = maxOf(disp!!.width, columnWidths[i])
-                colDisplays[i] = disp
+                val display = createLineForMathList(row[i], font, style, false)
+                columnWidths[i] = maxOf(display.width, columnWidths[i])
+                colDisplays[i] = display
             }
         }
         return displays
@@ -1461,10 +1461,10 @@ class MTTypesetter(
         // Position the rows
         // We will first position the rows starting from 0 and then in the second pass center the whole table vertically.
         var currPos = 0.0f
-        val openup = table.interRowAdditionalSpacing * kJotMultiplier * styleFont.fontSize
-        val baselineSkip = openup + kBaseLineSkipMultiplier * styleFont.fontSize
-        val lineSkip = openup + kLineSkipMultiplier * styleFont.fontSize
-        val lineSkipLimit = openup + kLineSkipLimitMultiplier * styleFont.fontSize
+        val openUp = table.interRowAdditionalSpacing * kJotMultiplier * styleFont.fontSize
+        val baselineSkip = openUp + kBaseLineSkipMultiplier * styleFont.fontSize
+        val lineSkip = openUp + kLineSkipMultiplier * styleFont.fontSize
+        val lineSkipLimit = openUp + kLineSkipLimitMultiplier * styleFont.fontSize
         var prevRowDescent = 0.0f
         var ascent = 0.0f
         var first = true
