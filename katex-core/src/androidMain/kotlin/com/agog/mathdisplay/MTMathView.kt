@@ -2,9 +2,14 @@ package com.agog.mathdisplay
 
 import android.content.Context
 import android.content.res.Resources
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Rect
+import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.View
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.core.graphics.withTranslation
 import com.agog.mathdisplay.MTMathView.MTMathViewMode.KMTMathViewModeDisplay
 import com.agog.mathdisplay.MTMathView.MTMathViewMode.KMTMathViewModeText
@@ -163,7 +168,7 @@ class MTMathView @JvmOverloads constructor(
     /**
      * Color of the equation if not overridden with local color changes by TeX commands
      */
-    var textColor = Color.BLACK
+    var textColor = Color.Black
         set(value) {
             field = value
             val dl = displayList
@@ -209,7 +214,7 @@ class MTMathView @JvmOverloads constructor(
         val paint = Paint()
         paint.typeface = Typeface.DEFAULT
         canvas.drawPaint(paint)
-        paint.color = Color.RED
+        paint.color = Color.Red.toArgb()
         paint.textSize = convertDpToPixel(errorFontSize)
         val r = errorBounds()
         canvas.drawText(lastError.errorDesc, 0.0f, -r.top.toFloat(), paint)
