@@ -1,15 +1,11 @@
 package com.pvporbit.freetype
 
 internal object Utils {
-    fun isHighSurrogate(c: Char) = (c.code in 0xD800..0xDBFF)
-
-    fun isLowSurrogate(c: Char) = (c.code in 0xDC00..0xDFFF)
-
-    fun codePointAt(sequence: CharArray, index: Int): Int {
-        val ch1 = sequence[index]
-        if (isHighSurrogate(ch1) && index + 1 < sequence.size) {
-            val ch2 = sequence[index + 1]
-            if (isLowSurrogate(ch2)) {
+    fun codePointAt(string: String, index: Int): Int {
+        val ch1 = string[index]
+        if (ch1.isHighSurrogate() && index + 1 < string.length) {
+            val ch2 = string[index + 1]
+            if (ch2.isLowSurrogate()) {
                 return ((ch1.code - 0xD800) shl 10) + (ch2.code - 0xDC00) + 0x10000
             }
         }
@@ -46,11 +42,11 @@ internal object Utils {
         var i = beginIndex
         while (i < endIndex) {
             val ch = this[i]
-            if (ch.isHighSurrogate() && i + 1 < endIndex && this[i + 1].isLowSurrogate()) {
+            i += if (ch.isHighSurrogate() && i + 1 < endIndex && this[i + 1].isLowSurrogate()) {
                 // 发现一个代理对，算作一个 code point
-                i += 2
+                2
             } else {
-                i += 1
+                1
             }
             count += 1
         }

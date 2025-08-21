@@ -205,10 +205,9 @@ open class MTMathAtom(
     var indexRange: NSRange = NSRange(0, 0)
 
     private fun dumpStr(s: String) {
-        val ca = s.toCharArray()
-        val cp = Utils.codePointAt(ca, 0)
+        val cp = Utils.codePointAt(s, 0)
         println("str $s codepoint $cp")
-        for (c in ca) {
+        for (c in s) {
             println("c $c")
         }
     }

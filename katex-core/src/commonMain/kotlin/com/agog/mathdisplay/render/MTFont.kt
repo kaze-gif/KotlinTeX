@@ -20,18 +20,17 @@ class MTFont(
 
     fun findGlyphForCharacterAtIndex(index: Int, str: String): CGGlyph {
         // Do we need to check with our font to see if this glyph is in the font?
-        val codepoint = Utils.codePointAt(str.toCharArray(), index)
+        val codepoint = Utils.codePointAt(str, index)
         val gid = mathTable.getGlyphForCodepoint(codepoint)
         return CGGlyph(gid)
     }
 
     fun getGidListForString(str: String): List<Int> {
-        val ca = str.toCharArray()
         val ret = MutableList(0) { 0 }
 
         var i = 0
-        while (i < ca.size) {
-            val codepoint = Utils.codePointAt(ca, i)
+        while (i < str.length) {
+            val codepoint = Utils.codePointAt(str, i)
             i += Utils.charCount(codepoint)
             val gid = mathTable.getGlyphForCodepoint(codepoint)
             if (gid == 0) {
