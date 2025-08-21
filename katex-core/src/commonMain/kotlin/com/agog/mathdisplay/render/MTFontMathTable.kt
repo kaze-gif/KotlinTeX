@@ -51,61 +51,49 @@ class BoundingBox() {
     }
 }
 
-class MTFontMathTable(
-    val font: MTFont,
-    fontPath: String? = null
-) {
-    var unitsPerEm: Int = 1
-    var fontSize: Float = 0f
-    lateinit var freeFace: Face
-    lateinit var freeTypeMathTable: MTFreeTypeMathTable
+class MTFontMathTable {
+    val fontSize: Float
+    val fontName: String
 
-    /*
-    lateinit var kConstantsTable: SortedMap<String, NSObject>
-    lateinit var kVertVariantsTable: SortedMap<String, NSObject>
-    lateinit var kHorizVariantsTable: SortedMap<String, NSObject>
-    lateinit var kItalicTable: SortedMap<String, NSObject>
-    lateinit var kAccentsTable: SortedMap<String, NSObject>
-    lateinit var kVertAssemblyTable: SortedMap<String, NSObject>
-    */
+    val unitsPerEm: Int
 
-    init {
-        fontSize = font.fontSize
+    val freeFace: Face
+    val freeTypeMathTable: MTFreeTypeMathTable
 
-        if (fontPath != null) {
-            println("Loading math table from $fontPath")
-            /* --- Init FreeType --- */
-            /* get singleton */
-            val library = FreeType.newLibrary()
-                ?: throw MathDisplayException("Error initializing FreeType.")
-            println("FreeType library version: ${library.version}")
+    constructor(
+        fontSize: Float,
+        fontName: String,
+        fontPath: String
+    ) {
+        this.fontSize = fontSize
+        this.fontName = fontName
+        println("Loading math table from $fontPath")
+        /* --- Init FreeType --- */
+        /* get singleton */
+        val library = FreeType.newLibrary()
+            ?: throw MathDisplayException("Error initializing FreeType.")
+        println("FreeType library version: ${library.version}")
 
-            freeFace = library.newFace(fontPath, 0)!!
-            println("FreeType face loaded: ${freeFace.familyName} (${freeFace.faceIndex})")
-            checkFontSize()
-            unitsPerEm = freeFace.unitsPerEM
+        this.freeFace = library.newFace(fontPath, 0)!!
+        println("FreeType face loaded: ${freeFace.familyName} (${freeFace.faceIndex})")
+        checkFontSize()
+        this.unitsPerEm = freeFace.unitsPerEM
+        this.freeTypeMathTable = freeFace.loadMathTable()
+    }
 
-
-            freeTypeMathTable = freeFace.loadMathTable()
-
-
-            /**
-            val kConstants: String = "constants"
-            val kVertVariants = "v_variants"
-            val kHorizVariants = "h_variants"
-            val kItalic = "italic"
-            val kAccents = "accents"
-            val kVertAssembly = "v_assembly"
-
-            kConstantsTable = getMathTable(kConstants)
-            kVertVariantsTable = getMathTable(kVertVariants)
-            kHorizVariantsTable = getMathTable(kHorizVariants)
-            kItalicTable = getMathTable(kItalic)
-            kAccentsTable = getMathTable(kAccents)
-            kVertAssemblyTable = getMathTable(kVertAssembly)
-             ***/
-        }
-
+    constructor(
+        fontSize: Float,
+        fontName: String,
+        unitsPerEm: Int,
+        freeFace: Face,
+        freeTypeMathTable: MTFreeTypeMathTable
+    ) {
+        this.fontSize = fontSize
+        this.fontName = fontName
+        println("Using existing math table for $fontName")
+        this.unitsPerEm = unitsPerEm
+        this.freeFace = freeFace
+        this.freeTypeMathTable = freeTypeMathTable
     }
 
     fun checkFontSize(): Face {
@@ -115,12 +103,7 @@ class MTFontMathTable(
 
     // Lightweight copy
     fun copyFontTableWithSize(size: Float): MTFontMathTable {
-        val copyTable = MTFontMathTable(font, null)
-        copyTable.fontSize = size
-        copyTable.unitsPerEm = this.unitsPerEm
-        copyTable.freeFace = this.freeFace
-        copyTable.freeTypeMathTable = this.freeTypeMathTable
-
+        val copyTable = MTFontMathTable(size, fontName, unitsPerEm, freeFace, freeTypeMathTable)
         return copyTable
     }
 
@@ -451,13 +434,13 @@ class MTFontMathTable(
     }
 
     fun getLargerGlyph(glyph: Int): Int {
-        val glyphName = this.font.getGlyphName(glyph)
+        val glyphName = getGlyphName(glyph)
         // Find the first variant with a different name.
         val variantGlyphs = freeTypeMathTable.getVerticalVariantsForGlyph(glyph)
         for (vGlyph in variantGlyphs) {
-            val vName = this.font.getGlyphName(vGlyph)
+            val vName = getGlyphName(vGlyph)
             if (vName != glyphName) {
-                return font.getGlyphWithName(vName)
+                return getGlyphWithName(vName)
             }
         }
         // We did not find any variants of this glyph so return it.

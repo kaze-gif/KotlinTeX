@@ -2,21 +2,19 @@ package com.agog.mathdisplay.render
 
 import com.pvporbit.freetype.Utils
 
-class MTFont(
-    val name: String,
-    val fontSize: Float,
-    isCopy: Boolean = false
-) {
-    lateinit var mathTable: MTFontMathTable
+class MTFont {
+    val fontSize: Float
+    val mathTable: MTFontMathTable
 
-    init {
-        val fontPath = "files/fonts/$name.otf"
-
-        if (!isCopy) {
-            mathTable = MTFontMathTable(this, fontPath)
-        }
+    constructor(fontSize: Float, fontName: String) {
+        this.fontSize = fontSize
+        this.mathTable = MTFontMathTable(fontSize, fontName, "files/fonts/$fontName.otf")
     }
 
+    constructor(fontSize: Float, mathTable: MTFontMathTable) {
+        this.fontSize = fontSize
+        this.mathTable = mathTable
+    }
 
     fun findGlyphForCharacterAtIndex(index: Int, str: String): CGGlyph {
         // Do we need to check with our font to see if this glyph is in the font?
@@ -41,20 +39,8 @@ class MTFont(
         return ret
     }
 
-
     fun copyFontWithSize(size: Float): MTFont {
-        val copyFont = MTFont(this.name, size, true)
-        copyFont.mathTable = this.mathTable.copyFontTableWithSize(size)
+        val copyFont = MTFont(size, mathTable.copyFontTableWithSize(size))
         return copyFont
     }
-
-
-    fun getGlyphName(gid: Int): String {
-        return mathTable.getGlyphName(gid)
-    }
-
-    fun getGlyphWithName(glyphName: String): Int {
-        return mathTable.getGlyphWithName(glyphName)
-    }
-
 }

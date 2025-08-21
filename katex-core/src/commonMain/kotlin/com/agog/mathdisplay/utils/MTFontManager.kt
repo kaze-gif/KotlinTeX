@@ -15,7 +15,7 @@ object MTFontManager {
     fun fontWithName(name: String, size: Float): MTFont {
         var f = nameToFontMap[name]
         if (f == null) {
-            f = MTFont(name, size)
+            f = MTFont(size, name)
             nameToFontMap[name] = f
             return f
         }

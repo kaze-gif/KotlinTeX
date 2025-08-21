@@ -30,7 +30,7 @@ class MTDrawFreeType(val mathFont: MTFontMathTable) {
 
                 // 构建包含估算尺寸的缓存键
                 val cacheKey =
-                    "$gid-${mathFont.font.name}-${mathFont.font.fontSize}-${estimatedWidth}x${estimatedHeight}"
+                    "$gid-${mathFont.fontName}-${mathFont.fontSize}-${estimatedWidth}x${estimatedHeight}"
 
                 val cachedBitmap = BitmapCache[cacheKey]
                 if (cachedBitmap != null) {
@@ -63,7 +63,7 @@ class MTDrawFreeType(val mathFont: MTFontMathTable) {
                     }
                 } else {
                     val cacheKey =
-                        "$gid-${mathFont.font.name}-${mathFont.font.fontSize}-${plainBitmap.width}x${plainBitmap.rows}"
+                        "$gid-${mathFont.fontName}-${mathFont.fontSize}-${plainBitmap.width}x${plainBitmap.rows}"
                     val cachedBitmap = BitmapCache[cacheKey]
                     val bitmap = cachedBitmap ?: createImageBitmapFromFreetypeBitmap(
                         plainBitmap.width,
