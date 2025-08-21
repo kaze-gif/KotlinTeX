@@ -34,7 +34,7 @@ internal object Utils {
     /**
      * 统计字符串在 UTF-16 单元索引 [beginIndex, endIndex) 区间内的 Unicode code point 数量。
      */
-    fun String.codePointCount(beginIndex: Int, endIndex: Int): Int {
+    fun String.codePointCount(beginIndex: Int = 0, endIndex: Int = length): Int {
         require(beginIndex in 0..length) { "beginIndex out of range" }
         require(endIndex in beginIndex..length) { "endIndex out of range" }
 

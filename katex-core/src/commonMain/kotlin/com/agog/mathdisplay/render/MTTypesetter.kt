@@ -5,6 +5,7 @@ import com.agog.mathdisplay.parse.MTColumnAlignment.*
 import com.agog.mathdisplay.parse.MTLineStyle.*
 import com.agog.mathdisplay.parse.MTMathAtomType.*
 import com.agog.mathdisplay.render.MTInterElementSpaceType.*
+import com.pvporbit.freetype.Utils.codePointCount
 
 
 // Delimiter shortfall from plain.tex
@@ -1249,7 +1250,7 @@ class MTTypesetter(
                 return false
             }
             val innerAtom = accent.innerList!!.atoms[0]
-            if (innerAtom.nucleus.numberOfGlyphs() != 1) {
+            if (innerAtom.nucleus.codePointCount() != 1) {
                 // A complex atom, not a simple char.
                 return false
             }
