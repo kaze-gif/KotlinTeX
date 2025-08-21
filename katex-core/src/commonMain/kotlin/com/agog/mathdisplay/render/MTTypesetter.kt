@@ -1249,7 +1249,7 @@ class MTTypesetter(
                 return false
             }
             val innerAtom = accent.innerList!!.atoms[0]
-            if (numberOfGlyphs(innerAtom.nucleus) != 1) {
+            if (innerAtom.nucleus.numberOfGlyphs() != 1) {
                 // A complex atom, not a simple char.
                 return false
             }

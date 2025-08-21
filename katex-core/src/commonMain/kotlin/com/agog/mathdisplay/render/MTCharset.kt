@@ -6,15 +6,12 @@ import com.pvporbit.freetype.Utils
 import com.pvporbit.freetype.Utils.codePointCount
 
 /**
- * Created by greg on 3/13/18.
+ * 计算字符串中包含的 Unicode 字符数量，一个 Unicode 字符可能由一个或多个 UTF-16 单元组成。
+ *
+ * @return 此字符串中的 Unicode 字符数量。
  */
-
-/*
-   A string is a sequence of characters that could be 1 or 2 in length to represent a unicode charater.
-   Given a string return the number of characters compensating
- */
-fun numberOfGlyphs(s: String): Int {
-    return (s.codePointCount(0, s.length))
+internal fun String.numberOfGlyphs(): Int {
+    return codePointCount(0, length)
 }
 
 data class CGGlyph(
@@ -27,66 +24,88 @@ data class CGGlyph(
         get() = gid != 0
 }
 
-const val kMTUnicodeGreekLowerStart: Char = '\u03B1'
-const val kMTUnicodeGreekLowerEnd = '\u03C9'
-const val kMTUnicodeGreekCapitalStart = '\u0391'
-const val kMTUnicodeGreekCapitalEnd = '\u03A9'
+internal const val kMTUnicodeGreekLowerStart: Char = '\u03B1'
+internal const val kMTUnicodeGreekLowerEnd = '\u03C9'
+internal const val kMTUnicodeGreekCapitalStart = '\u0391'
+internal const val kMTUnicodeGreekCapitalEnd = '\u03A9'
 
 // Note this is not equivalent to ch.isLowerCase() delta is a test case
-fun isLowerEn(ch: Char): Boolean {
+internal fun isLowerEn(ch: Char): Boolean {
     return (ch) >= 'a' && (ch) <= 'z'
 }
 
-fun isUpperEn(ch: Char): Boolean {
+internal fun isUpperEn(ch: Char): Boolean {
     return (ch) >= 'A' && (ch) <= 'Z'
 }
 
-fun isNumber(ch: Char): Boolean {
+internal fun isNumber(ch: Char): Boolean {
     return (ch) >= '0' && (ch) <= '9'
 }
 
-fun isLowerGreek(ch: Char): Boolean {
+/**
+ * 判断给定字符是否属于希腊字母的小写字母范围。
+ *
+ * @param ch 要检查的字符。
+ * @return 如果字符是希腊字母的小写字母，则返回 true；否则返回 false。
+ */
+internal fun isLowerGreek(ch: Char): Boolean {
     return (ch) >= kMTUnicodeGreekLowerStart && (ch) <= kMTUnicodeGreekLowerEnd
 }
 
-fun isCapitalGreek(ch: Char): Boolean {
+/**
+ * 检查是否为希腊大写字母字符。
+ *
+ * @param ch 要检查的字符。
+ * @return 如果字符是希腊大写字母，则返回true；否则返回false。
+ */
+internal fun isCapitalGreek(ch: Char): Boolean {
     return (ch) >= kMTUnicodeGreekCapitalStart && (ch) <= kMTUnicodeGreekCapitalEnd
 }
 
 
-fun greekSymbolOrder(ch: Char): Int {
+/**
+ * 返回给定字符在希腊符号特定顺序中的位置。
+ *
+ * @param ch 要查找位置的字符。
+ * @return 如果字符是特定的希腊符号之一，则返回其在数组中的索引；否则返回 -1。
+ */
+internal fun greekSymbolOrder(ch: Char): Int {
     // These greek symbols that always appear in unicode in this particular order after the alphabet
     // The symbols are epsilon, vartheta, varkappa, phi, varrho, varpi.
-    val greekSymbols: Array<Int> = arrayOf(0x03F5, 0x03D1, 0x03F0, 0x03D5, 0x03F1, 0x03D6)
+    val greekSymbols = arrayOf(0x03F5, 0x03D1, 0x03F0, 0x03D5, 0x03F1, 0x03D6)
     return greekSymbols.indexOf(ch.code)
 }
 
-fun isGREEKSYMBOL(ch: Char): Boolean {
+/**
+ * 判断给定字符是否为希腊符号。
+ *
+ * @param ch 要判断的字符。
+ * @return 如果字符是某个特定的希腊符号，则返回 true；否则返回 false。
+ */
+internal fun isGreekSymbol(ch: Char): Boolean {
     return (greekSymbolOrder(ch) != -1)
 }
 
-class MTCodepointChar(val codepoint: Int) {
-
+internal class MTCodepointChar(val codepoint: Int) {
     fun toUnicodeString(): String {
         val cs = Utils.codePointToChars(codepoint)
         val sb = StringBuilder()
         sb.append(cs)
         val sbs = sb.toString()
-        return (sbs)
+        return sbs
     }
-
 }
 
 
 // mathit
-const val kMTUnicodePlanksConstant = 0x210e
-const val kMTUnicodeMathCapitalItalicStart = 0x1D434
-const val kMTUnicodeMathLowerItalicStart = 0x1D44E
-const val kMTUnicodeGreekCapitalItalicStart = 0x1D6E2
-const val kMTUnicodeGreekLowerItalicStart = 0x1D6FC
-const val kMTUnicodeGreekSymbolItalicStart = 0x1D716
+internal const val kMTUnicodePlanksConstant = 0x210e
+internal const val kMTUnicodeMathCapitalItalicStart = 0x1D434
+internal const val kMTUnicodeMathLowerItalicStart = 0x1D44E
+internal const val kMTUnicodeGreekCapitalItalicStart = 0x1D6E2
+internal const val kMTUnicodeGreekLowerItalicStart = 0x1D6FC
+internal const val kMTUnicodeGreekSymbolItalicStart = 0x1D716
 
-fun getItalicized(ch: Char): MTCodepointChar {
+internal fun getItalicized(ch: Char): MTCodepointChar {
     // Special cases for italics
     when {
         ch == 'h' -> {  // italic h (plank's constant)
@@ -111,7 +130,7 @@ fun getItalicized(ch: Char): MTCodepointChar {
             return MTCodepointChar(kMTUnicodeGreekLowerItalicStart + (ch - kMTUnicodeGreekLowerStart))
         }
 
-        isGREEKSYMBOL(ch) -> {
+        isGreekSymbol(ch) -> {
             return MTCodepointChar(kMTUnicodeGreekSymbolItalicStart + greekSymbolOrder(ch))
         }
     }
@@ -120,14 +139,14 @@ fun getItalicized(ch: Char): MTCodepointChar {
 }
 
 // mathbf
-const val kMTUnicodeMathCapitalBoldStart = 0x1D400
-const val kMTUnicodeMathLowerBoldStart = 0x1D41A
-const val kMTUnicodeGreekCapitalBoldStart = 0x1D6A8
-const val kMTUnicodeGreekLowerBoldStart = 0x1D6C2
-const val kMTUnicodeGreekSymbolBoldStart = 0x1D6DC
-const val kMTUnicodeNumberBoldStart = 0x1D7CE
+internal const val kMTUnicodeMathCapitalBoldStart = 0x1D400
+internal const val kMTUnicodeMathLowerBoldStart = 0x1D41A
+internal const val kMTUnicodeGreekCapitalBoldStart = 0x1D6A8
+internal const val kMTUnicodeGreekLowerBoldStart = 0x1D6C2
+internal const val kMTUnicodeGreekSymbolBoldStart = 0x1D6DC
+internal const val kMTUnicodeNumberBoldStart = 0x1D7CE
 
-fun getBold(ch: Char): MTCodepointChar {
+internal fun getBold(ch: Char): MTCodepointChar {
     when {
         isUpperEn(ch) -> {
             return MTCodepointChar(kMTUnicodeMathCapitalBoldStart + (ch - 'A'))
@@ -147,7 +166,7 @@ fun getBold(ch: Char): MTCodepointChar {
             return MTCodepointChar(kMTUnicodeGreekLowerBoldStart + (ch - kMTUnicodeGreekLowerStart))
         }
 
-        isGREEKSYMBOL(ch) -> {
+        isGreekSymbol(ch) -> {
             return MTCodepointChar(kMTUnicodeGreekSymbolBoldStart + greekSymbolOrder(ch))
         }
 
@@ -159,13 +178,13 @@ fun getBold(ch: Char): MTCodepointChar {
 }
 
 // mathbfit
-const val kMTUnicodeMathCapitalBoldItalicStart = 0x1D468
-const val kMTUnicodeMathLowerBoldItalicStart = 0x1D482
-const val kMTUnicodeGreekCapitalBoldItalicStart = 0x1D71C
-const val kMTUnicodeGreekLowerBoldItalicStart = 0x1D736
-const val kMTUnicodeGreekSymbolBoldItalicStart = 0x1D750
+internal const val kMTUnicodeMathCapitalBoldItalicStart = 0x1D468
+internal const val kMTUnicodeMathLowerBoldItalicStart = 0x1D482
+internal const val kMTUnicodeGreekCapitalBoldItalicStart = 0x1D71C
+internal const val kMTUnicodeGreekLowerBoldItalicStart = 0x1D736
+internal const val kMTUnicodeGreekSymbolBoldItalicStart = 0x1D750
 
-fun getBoldItalic(ch: Char): MTCodepointChar {
+internal fun getBoldItalic(ch: Char): MTCodepointChar {
     when {
         isUpperEn(ch) -> {
             return MTCodepointChar(kMTUnicodeMathCapitalBoldItalicStart + (ch - 'A'))
@@ -185,7 +204,7 @@ fun getBoldItalic(ch: Char): MTCodepointChar {
             return MTCodepointChar(kMTUnicodeGreekLowerBoldItalicStart + (ch - kMTUnicodeGreekLowerStart))
         }
 
-        isGREEKSYMBOL(ch) -> {
+        isGreekSymbol(ch) -> {
             return MTCodepointChar(kMTUnicodeGreekSymbolBoldItalicStart + greekSymbolOrder(ch))
         }
 
@@ -198,9 +217,9 @@ fun getBoldItalic(ch: Char): MTCodepointChar {
 }
 
 // LaTeX default
-fun getDefaultStyle(ch: Char): MTCodepointChar {
+internal fun getDefaultStyle(ch: Char): MTCodepointChar {
     when {
-        isLowerEn(ch) || isUpperEn(ch) || isLowerGreek(ch) || isGREEKSYMBOL(ch) -> {
+        isLowerEn(ch) || isUpperEn(ch) || isLowerGreek(ch) || isGreekSymbol(ch) -> {
             return getItalicized(ch)
         }
 
@@ -216,13 +235,13 @@ fun getDefaultStyle(ch: Char): MTCodepointChar {
     throw MathDisplayException("Unknown character $ch for default style.")
 }
 
-const val kMTUnicodeMathCapitalScriptStart = 0x1D49C
+internal const val kMTUnicodeMathCapitalScriptStart = 0x1D49C
 // TODO(kostub): Unused in Latin Modern Math - if another font is used determine if
 // this should be applicable.
 // static const MTCodepointChar kMTUnicodeMathLowerScriptStart = 0x1D4B6;
 
 // mathcal/mathscr (calligraphic or script)
-fun getCalligraphicChar(ch: Char): MTCodepointChar {
+internal fun getCalligraphicChar(ch: Char): MTCodepointChar {
     // Calligraphic has lots of exceptions:
     when (ch) {
         'B' ->
@@ -264,12 +283,12 @@ fun getCalligraphicChar(ch: Char): MTCodepointChar {
     return getDefaultStyle(ch)
 }
 
-const val kMTUnicodeMathCapitalTTStart = 0x1D670
-const val kMTUnicodeMathLowerTTStart = 0x1D68A
-const val kMTUnicodeNumberTTStart = 0x1D7F6
+internal const val kMTUnicodeMathCapitalTTStart = 0x1D670
+internal const val kMTUnicodeMathLowerTTStart = 0x1D68A
+internal const val kMTUnicodeNumberTTStart = 0x1D7F6
 
 // mathtt (monospace)
-fun getTypewriter(ch: Char): MTCodepointChar {
+internal fun getTypewriter(ch: Char): MTCodepointChar {
     when {
         isUpperEn(ch) -> {
             return MTCodepointChar(kMTUnicodeMathCapitalTTStart + (ch - 'A'))
@@ -291,12 +310,12 @@ fun getTypewriter(ch: Char): MTCodepointChar {
     }
 }
 
-const val kMTUnicodeMathCapitalSansSerifStart = 0x1D5A0
-const val kMTUnicodeMathLowerSansSerifStart = 0x1D5BA
-const val kMTUnicodeNumberSansSerifStart = 0x1D7E2
+internal const val kMTUnicodeMathCapitalSansSerifStart = 0x1D5A0
+internal const val kMTUnicodeMathLowerSansSerifStart = 0x1D5BA
+internal const val kMTUnicodeNumberSansSerifStart = 0x1D7E2
 
 // mathsf
-fun getSansSerif(ch: Char): MTCodepointChar {
+internal fun getSansSerif(ch: Char): MTCodepointChar {
     when {
         isUpperEn(ch) -> {
             return MTCodepointChar(kMTUnicodeMathCapitalSansSerifStart + (ch - 'A'))
@@ -318,11 +337,11 @@ fun getSansSerif(ch: Char): MTCodepointChar {
     }
 }
 
-const val kMTUnicodeMathCapitalFrakturStart = 0x1D504
-const val kMTUnicodeMathLowerFrakturStart = 0x1D51E
+internal const val kMTUnicodeMathCapitalFrakturStart = 0x1D504
+internal const val kMTUnicodeMathLowerFrakturStart = 0x1D51E
 
 // mathfrak
-fun getFraktur(ch: Char): MTCodepointChar {
+internal fun getFraktur(ch: Char): MTCodepointChar {
     // Fraktur has exceptions:
     when (ch) {
         'C' ->
@@ -346,12 +365,12 @@ fun getFraktur(ch: Char): MTCodepointChar {
     return getDefaultStyle(ch)
 }
 
-const val kMTUnicodeMathCapitalBlackboardStart = 0x1D538
-const val kMTUnicodeMathLowerBlackboardStart = 0x1D552
-const val kMTUnicodeNumberBlackboardStart = 0x1D7D8
+internal const val kMTUnicodeMathCapitalBlackboardStart = 0x1D538
+internal const val kMTUnicodeMathLowerBlackboardStart = 0x1D552
+internal const val kMTUnicodeNumberBlackboardStart = 0x1D7D8
 
 // mathbb (double struck)
-fun getBlackboard(ch: Char): MTCodepointChar {
+internal fun getBlackboard(ch: Char): MTCodepointChar {
     // Blackboard has lots of exceptions:
     when (ch) {
         'C' ->
@@ -387,7 +406,7 @@ fun getBlackboard(ch: Char): MTCodepointChar {
     return getDefaultStyle(ch)
 }
 
-fun styleCharacter(ch: Char, fontStyle: MTFontStyle): MTCodepointChar {
+internal fun styleCharacter(ch: Char, fontStyle: MTFontStyle): MTCodepointChar {
     when (fontStyle) {
         MTFontStyle.KMTFontStyleDefault -> {
             return getDefaultStyle(ch)
@@ -437,7 +456,7 @@ fun styleCharacter(ch: Char, fontStyle: MTFontStyle): MTCodepointChar {
 
 // This can only take single unicode character sequence as input.
 // Should never be called with a codepoint that requires 2 escaped characters to represent
-fun changeFont(str: String, fontStyle: MTFontStyle): String {
+internal fun changeFont(str: String, fontStyle: MTFontStyle): String {
     val ret = StringBuilder()
     val ca = str.toCharArray()
     for (ch in ca) {
