@@ -1,19 +1,6 @@
 package com.agog.mathdisplay.parse
 
-private const val MTSymbolMultiplication = "\u00D7"
-private const val MTSymbolDivision = "\u00F7"
-private const val MTSymbolFractionSlash = "\u2044"
-private const val MTSymbolWhiteSquare = "\u25A1"
-private const val MTSymbolBlackSquare = "\u25A0"
-private const val MTSymbolLessEqual = "\u2264"
-private const val MTSymbolGreaterEqual = "\u2265"
-private const val MTSymbolNotEqual = "\u2260"
-private const val MTSymbolSquareRoot = "\u221A" // \sqrt
-private const val MTSymbolCubeRoot = "\u221B"
-private const val MTSymbolInfinity = "\u221E" // \infty
-private const val MTSymbolAngle = "\u2220" // \angle
-private const val MTSymbolDegree = "\u00B0" // \circ
-
+import com.agog.mathdisplay.render.*
 
 open class MTMathAtomFactory {
     val aliases: Map<String, String> = hashMapOf(
@@ -131,7 +118,7 @@ open class MTMathAtomFactory {
     private val supportedLatexSymbols: HashMap<String, MTMathAtom> = hashMapOf(
         "square" to placeholder(),
         "Box" to placeholder(),
-        "blacksquare" to MTMathAtom(MTMathAtomType.KMTMathAtomPlaceholder, MTSymbolBlackSquare),
+        "blacksquare" to MTMathAtom(MTMathAtomType.KMTMathAtomPlaceholder, blackSquare),
 
         // Greek characters
         "alpha" to MTMathAtom(MTMathAtomType.KMTMathAtomVariable, "\u03B1"),
@@ -219,9 +206,9 @@ open class MTMathAtomFactory {
 
 
         // Relations
-        "leq" to MTMathAtom(MTMathAtomType.KMTMathAtomRelation, MTSymbolLessEqual),
-        "geq" to MTMathAtom(MTMathAtomType.KMTMathAtomRelation, MTSymbolGreaterEqual),
-        "neq" to MTMathAtom(MTMathAtomType.KMTMathAtomRelation, MTSymbolNotEqual),
+        "leq" to MTMathAtom(MTMathAtomType.KMTMathAtomRelation, lessEqual),
+        "geq" to MTMathAtom(MTMathAtomType.KMTMathAtomRelation, greaterEqual),
+        "neq" to MTMathAtom(MTMathAtomType.KMTMathAtomRelation, notEqual),
         "in" to MTMathAtom(MTMathAtomType.KMTMathAtomRelation, "\u2208"),
         "notin" to MTMathAtom(MTMathAtomType.KMTMathAtomRelation, "\u2209"),
         "ni" to MTMathAtom(MTMathAtomType.KMTMathAtomRelation, "\u220B"),
@@ -555,15 +542,15 @@ open class MTMathAtomFactory {
     }
 
     fun times(): MTMathAtom {
-        return MTMathAtom(MTMathAtomType.KMTMathAtomBinaryOperator, MTSymbolMultiplication)
+        return MTMathAtom(MTMathAtomType.KMTMathAtomBinaryOperator, multiplication)
     }
 
     private fun divide(): MTMathAtom {
-        return MTMathAtom(MTMathAtomType.KMTMathAtomBinaryOperator, MTSymbolDivision)
+        return MTMathAtom(MTMathAtomType.KMTMathAtomBinaryOperator, division)
     }
 
     private fun placeholder(): MTMathAtom {
-        return MTMathAtom(MTMathAtomType.KMTMathAtomPlaceholder, MTSymbolWhiteSquare)
+        return MTMathAtom(MTMathAtomType.KMTMathAtomPlaceholder, whiteSquare)
     }
 
     @Suppress("unused")

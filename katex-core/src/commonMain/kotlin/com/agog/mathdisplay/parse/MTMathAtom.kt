@@ -169,7 +169,7 @@ open class MTMathAtom(
     var type: MTMathAtomType,
     var nucleus: String
 ) {
-
+    constructor(type: MTMathAtomType, char: Char) : this(type, char.toString())
     /** Returns a string representation of the MTMathAtom */
     /** The nucleus of the atom. */
 
