@@ -14,14 +14,9 @@ object MTColor {
     const val MAGENTA = 0xFFFF00FF.toInt()
     const val TRANSPARENT = 0
 
-    /**
-     * 通用字符串转Color
-     * 支持 #RGB/#ARGB/#RRGGBB/#AARRGGBB，部分英文色名
-     */
-    fun parseColor(colorString: String?): Int {
-        val str = colorString.orEmpty().trim()
-        // 支持常用英文色名
-        val namedColors = mapOf(
+    // 支持常用英文色名
+    private val namedColors by lazy {
+        mapOf(
             "black" to BLACK,
             "white" to WHITE,
             "red" to RED,
@@ -32,6 +27,16 @@ object MTColor {
             "magenta" to MAGENTA,
             "gray" to GRAY,
         )
+    }
+
+    /**
+     * 通用字符串转Color
+     * 支持 #RGB/#ARGB/#RRGGBB/#AARRGGBB，部分英文色名
+     */
+    fun parseColor(colorString: String?): Int {
+        if (colorString == null) return TRANSPARENT
+        val str = colorString.trim()
+
         val colorInt = when {
             str.startsWith("#") -> {
                 // 去掉 #

@@ -226,7 +226,6 @@ class MTMathListDisplay(
                 } else {
                     displayAtom.textColor = displayAtom.localTextColor
                 }
-
             }
         }
     }
@@ -314,18 +313,18 @@ class MTFractionDisplay(
 
     override var ascent: Float
         get() = this.numerator.ascent + this.numeratorUp
-        set(value) {
+        set(_) {
         }
 
     override var descent: Float
         get() = this.denominator.descent + this.denominatorDown
-        set(value) {
+        set(_) {
         }
 
 
     override var width: Float
         get() = maxOf(this.numerator.width, this.denominator.width)
-        set(value) {
+        set(_) {
         }
 
 
@@ -600,7 +599,7 @@ class MTLargeOpLimitsDisplay(
         } else {
             nucleus.ascent
         }
-        set(value) {
+        set(_) {
         }
 
     override var descent: Float
@@ -609,7 +608,7 @@ class MTLargeOpLimitsDisplay(
         } else {
             nucleus.descent
         }
-        set(value) {
+        set(_) {
         }
 
 
