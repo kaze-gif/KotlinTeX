@@ -74,14 +74,13 @@ private val constTable = arrayOf(
 
 class MTFreeTypeMathTable(val pointer: Long, val data: NativeBinaryBuffer) {
     private val constants: HashMap<String, Int> = hashMapOf()
-    private val italicscorrectioninfo: HashMap<Int, Int> = hashMapOf()
-    private val topaccentattachment: HashMap<Int, Int> = hashMapOf()
-    private val vertglyphconstruction: HashMap<Int, MathGlyphConstruction> = hashMapOf()
-    private val horizglyphconstruction: HashMap<Int, MathGlyphConstruction> = hashMapOf()
+    private val italicsCorrectionInfo: HashMap<Int, Int> = hashMapOf()
+    private val topAccentAttachment: HashMap<Int, Int> = hashMapOf()
+    private val vertGlyphConstruction: HashMap<Int, MathGlyphConstruction> = hashMapOf()
+    private val horizGlyphConstruction: HashMap<Int, MathGlyphConstruction> = hashMapOf()
     var minConnectorOverlap: Int = 0
 
     init {
-        val i = data.remaining()
         val success = FreeType.loadMathTable(pointer, data, data.remaining())
 
         if (success) {
@@ -93,7 +92,7 @@ class MTFreeTypeMathTable(val pointer: Long, val data: NativeBinaryBuffer) {
                 //println("MathConstants $MathConstants MathGlyphInfo $MathGlyphInfo MathVariants $MathVariants")
                 readConstants(mathConstantsOffset)
 
-                // Glyph Info Tabe
+                // Glyph Info Table
                 data.position(mathGlyphInfoOffset)
                 val mathItalicsCorrectionInfo = getDataSInt()
                 val mathTopAccentAttachment = getDataSInt()
@@ -102,13 +101,13 @@ class MTFreeTypeMathTable(val pointer: Long, val data: NativeBinaryBuffer) {
                 // This is unused
                 //val mathKernInfo = getDataSInt()
 
-                readmatchedtable(
+                readMatchedTable(
                     mathGlyphInfoOffset + mathItalicsCorrectionInfo,
-                    italicscorrectioninfo
+                    italicsCorrectionInfo
                 )
-                readmatchedtable(mathGlyphInfoOffset + mathTopAccentAttachment, topaccentattachment)
+                readMatchedTable(mathGlyphInfoOffset + mathTopAccentAttachment, topAccentAttachment)
 
-                readvariants(mathVariantsOffset)
+                readVariants(mathVariantsOffset)
             }
         }
     }
@@ -122,12 +121,12 @@ class MTFreeTypeMathTable(val pointer: Long, val data: NativeBinaryBuffer) {
         return constants[name]!!
     }
 
-    fun getitalicCorrection(gid: Int): Int {
-        return italicscorrectioninfo[gid] ?: 0
+    fun getItalicCorrection(gid: Int): Int {
+        return italicsCorrectionInfo[gid] ?: 0
     }
 
-    fun gettopAccentAttachment(gid: Int): Int? {
-        return topaccentattachment[gid]
+    fun getTopAccentAttachment(gid: Int): Int? {
+        return topAccentAttachment[gid]
     }
 
     private fun getVariantsForGlyph(
@@ -144,25 +143,25 @@ class MTFreeTypeMathTable(val pointer: Long, val data: NativeBinaryBuffer) {
     }
 
     fun getVerticalVariantsForGlyph(gid: Int): List<Int> {
-        return getVariantsForGlyph(vertglyphconstruction, gid)
+        return getVariantsForGlyph(vertGlyphConstruction, gid)
     }
 
     fun getHorizontalVariantsForGlyph(gid: Int): List<Int> {
-        return getVariantsForGlyph(horizglyphconstruction, gid)
+        return getVariantsForGlyph(horizGlyphConstruction, gid)
     }
 
     fun getVerticalGlyphAssemblyForGlyph(gid: Int): Array<GlyphPartRecord>? {
-        val v = vertglyphconstruction[gid]
-        if (v?.assembly == null) return (null)
+        val v = vertGlyphConstruction[gid]
+        if (v?.assembly == null) return null
 
-        return (v.assembly.partRecords)
+        return v.assembly.partRecords
     }
 
 
     private fun getDataRecord(): Int {
         val value = getDataSInt()
 
-        @Suppress("UNUSED_VARIABLE")
+        @Suppress("UNUSED_VARIABLE", "unused")
         val deviceTable = getDataSInt()
         return value
     }
@@ -170,15 +169,15 @@ class MTFreeTypeMathTable(val pointer: Long, val data: NativeBinaryBuffer) {
 
     // Read either a correction or offset table that has a table of glyphs covered that correspond
     // to an array of MathRecords of the values
-    private fun readmatchedtable(foffset: Int, table: HashMap<Int, Int>) {
+    private fun readMatchedTable(foffset: Int, table: HashMap<Int, Int>) {
         data.position(foffset)
-        val coverageoffset = getDataSInt()
+        val coverageOffset = getDataSInt()
 
-        val coverage = readCoverageTable(foffset + coverageoffset)
+        val coverage = readCoverageTable(foffset + coverageOffset)
 
         val count = getDataSInt()
         for (i in 0 until count) {
-            // indexed by glyphid
+            // indexed by glyphId
             table[coverage[i]] = getDataRecord()
         }
 
@@ -190,32 +189,37 @@ class MTFreeTypeMathTable(val pointer: Long, val data: NativeBinaryBuffer) {
 
         var i = 0
         while (i < constTable.size) {
-            val recordtype = constTable[i]
-            val recordname = constTable[i + 1]
-            when (recordtype) {
+            val recordType = constTable[i]
+            val recordName = constTable[i + 1]
+            when (recordType) {
                 "uint16", "int16" -> {
                     val value: Int = getDataSInt()
-                    constants[recordname] = value
+                    constants[recordName] = value
                 }
 
                 else -> {
                     val value: Int = getDataSInt()
 
-                    @Suppress("UNUSED_VARIABLE")
+                    @Suppress("UNUSED_VARIABLE", "unused")
                     val offset: Int = getDataSInt()
-                    constants[recordname] = value
+                    constants[recordName] = value
                 }
             }
             i += 2
         }
     }
 
+
     // https://docs.microsoft.com/en-us/typography/opentype/spec/chapter2
-    /*
-        Read an array of glyph ids
+    /**
+     * 读取 Coverage 表，该表用于描述字体中一组字形的覆盖范围。
+     *
+     * @param foffset 表的起始偏移位置。
+     * @return 一个包含字形 ID 的数组。
+     * @throws Exception 当数据格式无效时抛出异常。
      */
     private fun readCoverageTable(foffset: Int): Array<Int> {
-        val currentposition = data.position()
+        val currentPosition = data.position()
         data.position(foffset)
         val format: Int = getDataSInt()
         val ra: Array<Int>?
@@ -223,7 +227,7 @@ class MTFreeTypeMathTable(val pointer: Long, val data: NativeBinaryBuffer) {
         when (format) {
             1 -> {
                 val glyphCount: Int = getDataSInt()
-                ra = Array(glyphCount, { 0 })
+                ra = Array(glyphCount) { 0 }
                 for (i in 0 until glyphCount) {
                     ra[i] = getDataSInt()
                 }
@@ -232,7 +236,7 @@ class MTFreeTypeMathTable(val pointer: Long, val data: NativeBinaryBuffer) {
             2 -> {
                 val rangeCount: Int = getDataSInt()
                 val rr = mutableListOf<Int>()
-                for (i in 0 until rangeCount) {
+                repeat(rangeCount) {
                     val startGlyphID = getDataSInt()
                     val endGlyphID = getDataSInt()
                     var startCoverageIndex = getDataSInt()
@@ -248,7 +252,7 @@ class MTFreeTypeMathTable(val pointer: Long, val data: NativeBinaryBuffer) {
             }
         }
 
-        data.position(currentposition)
+        data.position(currentPosition)
         return ra
     }
 
@@ -275,8 +279,8 @@ class MTFreeTypeMathTable(val pointer: Long, val data: NativeBinaryBuffer) {
         val partRecords: Array<GlyphPartRecord>
     )
 
-    private fun readconstruction(foffset: Int): MathGlyphConstruction {
-        val currentposition = data.position()
+    private fun readConstruction(foffset: Int): MathGlyphConstruction {
+        val currentPosition = data.position()
         data.position(foffset)
 
         val glyphAssemblyOff = getDataSInt()
@@ -287,14 +291,14 @@ class MTFreeTypeMathTable(val pointer: Long, val data: NativeBinaryBuffer) {
             val advanceMeasurement = getDataSInt()
             variants.add(v, MathGlyphVariantRecord(variantGlyph, advanceMeasurement))
         }
-        val assembly = if (glyphAssemblyOff == 0) null else readassembly(foffset + glyphAssemblyOff)
+        val assembly = if (glyphAssemblyOff == 0) null else readAssembly(foffset + glyphAssemblyOff)
         val construction = MathGlyphConstruction(assembly, variants.toTypedArray())
-        data.position(currentposition)
+        data.position(currentPosition)
         return construction
     }
 
-    private fun readassembly(foffset: Int): GlyphAssembly {
-        val currentposition = data.position()
+    private fun readAssembly(foffset: Int): GlyphAssembly {
+        val currentPosition = data.position()
         data.position(foffset)
 
         val italicsCorrection = getDataRecord()
@@ -319,12 +323,12 @@ class MTFreeTypeMathTable(val pointer: Long, val data: NativeBinaryBuffer) {
             )
         }
         val assembly = GlyphAssembly(italicsCorrection, parts.toTypedArray())
-        data.position(currentposition)
+        data.position(currentPosition)
         return assembly
     }
 
 
-    private fun readvariants(foffset: Int) {
+    private fun readVariants(foffset: Int) {
         data.position(foffset)
 
         this.minConnectorOverlap = getDataSInt()
@@ -333,18 +337,17 @@ class MTFreeTypeMathTable(val pointer: Long, val data: NativeBinaryBuffer) {
         val vertGlyphCount = getDataSInt()
         val horizGlyphCount = getDataSInt()
 
-        val vertcoverage = readCoverageTable(foffset + vertGlyphCoverage)
-        val horizcoverage = readCoverageTable(foffset + horizGlyphCoverage)
+        val vertCoverage = readCoverageTable(foffset + vertGlyphCoverage)
+        val horizCoverage = readCoverageTable(foffset + horizGlyphCoverage)
 
         for (g in 0 until vertGlyphCount) {
             val glyphConstruction = getDataSInt()
-            vertglyphconstruction[vertcoverage[g]] = readconstruction(foffset + glyphConstruction)
+            vertGlyphConstruction[vertCoverage[g]] = readConstruction(foffset + glyphConstruction)
         }
 
         for (g in 0 until horizGlyphCount) {
             val glyphConstruction = getDataSInt()
-            horizglyphconstruction[horizcoverage[g]] = readconstruction(foffset + glyphConstruction)
+            horizGlyphConstruction[horizCoverage[g]] = readConstruction(foffset + glyphConstruction)
         }
     }
-
 }

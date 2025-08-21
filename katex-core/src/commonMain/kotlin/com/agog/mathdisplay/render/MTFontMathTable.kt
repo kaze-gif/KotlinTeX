@@ -7,11 +7,11 @@ import com.pvporbit.freetype.FreeTypeConstants.FT_LOAD_NO_SCALE
 import com.pvporbit.freetype.MTFreeTypeMathTable
 
 data class MTGlyphPart(
-    var glyph: Int = 0,
-    var fullAdvance: Float = 0f,
-    var startConnectorLength: Float = 0f,
-    var endConnectorLength: Float = 0f,
-    var isExtender: Boolean = false
+    val glyph: Int = 0,
+    val fullAdvance: Float = 0f,
+    val startConnectorLength: Float = 0f,
+    val endConnectorLength: Float = 0f,
+    val isExtender: Boolean = false
 )
 
 
@@ -213,127 +213,98 @@ class MTFontMathTable {
         return freeTypeMathTable.getConstant(percentName) / 100.0f
     }
 
+    // MARK: - Fractions
     val fractionNumeratorDisplayStyleShiftUp: Float
         get() = constantFromTable("FractionNumeratorDisplayStyleShiftUp")
-
-
     val fractionNumeratorShiftUp: Float
         get() = constantFromTable("FractionNumeratorShiftUp")
-
-
     val fractionDenominatorDisplayStyleShiftDown: Float
         get() = constantFromTable("FractionDenominatorDisplayStyleShiftDown")
-
     val fractionDenominatorShiftDown: Float
         get() = constantFromTable("FractionDenominatorShiftDown")
-
     val fractionNumeratorDisplayStyleGapMin: Float
         get() = constantFromTable("FractionNumDisplayStyleGapMin")
-
     val fractionNumeratorGapMin: Float
         get() = constantFromTable("FractionNumeratorGapMin")
-
     val fractionDenominatorDisplayStyleGapMin: Float
         get() = constantFromTable("FractionDenomDisplayStyleGapMin")
-
-
     val fractionDenominatorGapMin: Float
         get() = constantFromTable("FractionDenominatorGapMin")
-
-
     val fractionRuleThickness: Float
         get() = constantFromTable("FractionRuleThickness")
-
     val skewedFractionHorizontalGap: Float
         get() = constantFromTable("SkewedFractionHorizontalGap")
-
     val skewedFractionVerticalGap: Float
         get() = constantFromTable("SkewedFractionVerticalGap")
 
-
-    // FractionDelimiterSize and FractionDelimiterDisplayStyleSize are not constants
-// specified in the OpenType Math specification. Rather these are proposed LuaTeX extensions
-// for the TeX parameters \sigma_20 (delim1) and \sigma_21 (delim2). Since these do not
-// exist in the fonts that we have, we use the same approach as LuaTeX and use the fontSize
-// to determine these values. The constants used are the same as LuaTeX and KaTeX and match the
-// metrics values of the original TeX fonts.
-// Note: An alternative approach is to use DelimitedSubFormulaMinHeight for \sigma21 and use a factor
-// of 2 to get \sigma 20 as proposed in Vieth paper.
-// The XeTeX implementation sets \sigma21 = fontSize and \sigma20 = DelimitedSubFormulaMinHeight which
-// will produce smaller delimiters.
-// Of all the approaches we've implemented LuaTeX's approach since it mimics LaTeX most accurately.
+    // MARK: - Non-standard
+    /**
+     * FractionDelimiterSize and FractionDelimiterDisplayStyleSize are not constants
+     * specified in the OpenType Math specification. Rather these are proposed LuaTeX extensions
+     * for the TeX parameters \sigma_20 (delim1) and \sigma_21 (delim2). Since these do not
+     * exist in the fonts that we have, we use the same approach as LuaTeX and use the fontSize
+     * to determine these values. The constants used are the same as LuaTeX and KaTeX and match the
+     * metrics values of the original TeX fonts.
+     * Note: An alternative approach is to use DelimitedSubFormulaMinHeight for \sigma21 and use a factor
+     * of 2 to get \sigma 20 as proposed in Vieth paper.
+     * The XeTeX implementation sets \sigma21 = fontSize and \sigma20 = DelimitedSubFormulaMinHeight which
+     * will produce smaller delimiters.
+     * Of all the approaches we've implemented LuaTeX's approach since it mimics LaTeX most accurately.
+     */
     val fractionDelimiterSize: Float
         get() = 1.01f * fontSize
 
-
+    /**
+     * Modified constant from 2.4 to 2.39, it matches KaTeX and looks better.
+     */
     val fractionDelimiterDisplayStyleSize: Float
-        // Modified constant from 2.4 to 2.39, it matches KaTeX and looks better.
         get() = 2.39f * fontSize
 
-    // Sub/Superscripts
-
+    // MARK: - super/sub scripts
     val superscriptShiftUp: Float
         get() = constantFromTable("SuperscriptShiftUp")
-
     val superscriptShiftUpCramped: Float
         get() = constantFromTable("SuperscriptShiftUpCramped")
-
     val subscriptShiftDown: Float
         get() = constantFromTable("SubscriptShiftDown")
-
     val superscriptBaselineDropMax: Float
         get() = constantFromTable("SuperscriptBaselineDropMax")
-
     val subscriptBaselineDropMin: Float
         get() = constantFromTable("SubscriptBaselineDropMin")
-
     val superscriptBottomMin: Float
         get() = constantFromTable("SuperscriptBottomMin")
-
     val subscriptTopMax: Float
         get() = constantFromTable("SubscriptTopMax")
-
     val subSuperscriptGapMin: Float
         get() = constantFromTable("SubSuperscriptGapMin")
-
     val superscriptBottomMaxWithSubscript: Float
         get() = constantFromTable("SuperscriptBottomMaxWithSubscript")
-
     val spaceAfterScript: Float
         get() = constantFromTable("SpaceAfterScript")
 
+    // MARK: - radicals
     val radicalRuleThickness: Float
         get() = constantFromTable("RadicalRuleThickness")
-
     val radicalExtraAscender: Float
         get() = constantFromTable("RadicalExtraAscender")
-
     val radicalVerticalGap: Float
         get() = constantFromTable("RadicalVerticalGap")
-
     val radicalDisplayStyleVerticalGap: Float
         get() = constantFromTable("RadicalDisplayStyleVerticalGap")
-
     val radicalKernBeforeDegree: Float
         get() = constantFromTable("RadicalKernBeforeDegree")
-
     val radicalKernAfterDegree: Float
         get() = constantFromTable("RadicalKernAfterDegree")
-
     val radicalDegreeBottomRaisePercent: Float
         get() = percentFromTable("RadicalDegreeBottomRaisePercent")
 
-    // Limits
-
+    // MARK: - Limits
     val upperLimitGapMin: Float
         get() = constantFromTable("UpperLimitGapMin")
-
     val upperLimitBaselineRiseMin: Float
         get() = constantFromTable("UpperLimitBaselineRiseMin")
-
     val lowerLimitGapMin: Float
         get() = constantFromTable("LowerLimitGapMin")
-
     val lowerLimitBaselineDropMin: Float
         get() = constantFromTable("LowerLimitBaselineDropMin")
 
@@ -341,28 +312,21 @@ class MTFontMathTable {
     val limitExtraAscenderDescender: Float
         get() = 0.0f
 
-    // Constants
-
+    // MARK: - Constants
     val axisHeight: Float
         get() = constantFromTable("AxisHeight")
-
     val scriptScaleDown: Float
         get() = percentFromTable("ScriptPercentScaleDown")
-
     val scriptScriptScaleDown: Float
         get() = percentFromTable("ScriptScriptPercentScaleDown")
-
     val mathLeading: Float
         get() = constantFromTable("MathLeading")
-
     val delimitedSubFormulaMinHeight: Float
         get() = constantFromTable("DelimitedSubFormulaMinHeight")
 
-    // Accents
-
+    // MARK: - Accent
     val accentBaseHeight: Float
         get() = constantFromTable("AccentBaseHeight")
-
     val flattenedAccentBaseHeight: Float
         get() = constantFromTable("FlattenedAccentBaseHeight")
 
@@ -371,60 +335,50 @@ class MTFontMathTable {
     val displayOperatorMinHeight: Float
         get() = constantFromTable("DisplayOperatorMinHeight")
 
-    // Over and Underbar
-
+    // MARK: - Overline
     val overbarExtraAscender: Float
         get() = constantFromTable("OverbarExtraAscender")
-
     val overbarRuleThickness: Float
         get() = constantFromTable("OverbarRuleThickness")
-
     val overbarVerticalGap: Float
         get() = constantFromTable("OverbarVerticalGap")
 
+    // MARK: - Underline
     val underbarExtraDescender: Float
         get() = constantFromTable("UnderbarExtraDescender")
-
     val underbarRuleThickness: Float
         get() = constantFromTable("UnderbarRuleThickness")
-
     val underbarVerticalGap: Float
         get() = constantFromTable("UnderbarVerticalGap")
 
-    // Stacks
-
-    val stackBottomDisplayStyleShiftDown: Float
-        get() = constantFromTable("StackBottomDisplayStyleShiftDown")
-
-    val stackBottomShiftDown: Float
-        get() = constantFromTable("StackBottomShiftDown")
-
-    val stackDisplayStyleGapMin: Float
-        get() = constantFromTable("StackDisplayStyleGapMin")
-
-    val stackGapMin: Float
-        get() = constantFromTable("StackGapMin")
-
+    // MARK: - Stacks
     val stackTopDisplayStyleShiftUp: Float
         get() = constantFromTable("StackTopDisplayStyleShiftUp")
-
     val stackTopShiftUp: Float
         get() = constantFromTable("StackTopShiftUp")
-
+    val stackBottomDisplayStyleShiftDown: Float
+        get() = constantFromTable("StackBottomDisplayStyleShiftDown")
+    val stackBottomShiftDown: Float
+        get() = constantFromTable("StackBottomShiftDown")
+    val stackDisplayStyleGapMin: Float
+        get() = constantFromTable("StackDisplayStyleGapMin")
+    val stackGapMin: Float
+        get() = constantFromTable("StackGapMin")
     val stretchStackBottomShiftDown: Float
         get() = constantFromTable("StretchStackBottomShiftDown")
-
     val stretchStackGapAboveMin: Float
         get() = constantFromTable("StretchStackGapAboveMin")
-
     val stretchStackGapBelowMin: Float
         get() = constantFromTable("StretchStackGapBelowMin")
-
     val stretchStackTopShiftUp: Float
         get() = constantFromTable("StretchStackTopShiftUp")
 
-    // Variants
-
+    /**
+     * 获取指定字形的垂直变体列表。
+     *
+     * @param glyph 表示字形的CGGlyph对象。
+     * @return 包含该字形所有垂直变体的整型列表。
+     */
     fun getVerticalVariantsForGlyph(glyph: CGGlyph): List<Int> {
         return freeTypeMathTable.getVerticalVariantsForGlyph(glyph.gid)
     }
@@ -449,12 +403,12 @@ class MTFontMathTable {
 
     // Italic Correction
     fun getItalicCorrection(gid: Int): Float {
-        return fontUnitsToPt(freeTypeMathTable.getitalicCorrection(gid))
+        return fontUnitsToPt(freeTypeMathTable.getItalicCorrection(gid))
     }
 
     // Top Accent Adjustment
     fun getTopAccentAdjustment(glyph: Int): Float {
-        val value = freeTypeMathTable.gettopAccentAttachment(glyph)
+        val value = freeTypeMathTable.getTopAccentAttachment(glyph)
         return if (value != null) {
             fontUnitsToPt(value)
         } else {
@@ -464,7 +418,7 @@ class MTFontMathTable {
             val glyphs = arrayOf(glyph)
             val advances = arrayOf(0.0f)
 
-            this.getAdvancesForGlyphs(glyphs.toList(), advances, 1)
+            getAdvancesForGlyphs(glyphs.toList(), advances, 1)
             advances[0] / 2
         }
     }
@@ -475,8 +429,7 @@ class MTFontMathTable {
 
 
     fun getVerticalGlyphAssemblyForGlyph(glyph: Int): List<MTGlyphPart>? {
-        val assemblyInfo: Array<MTFreeTypeMathTable.GlyphPartRecord>? =
-            freeTypeMathTable.getVerticalGlyphAssemblyForGlyph(glyph)
+        val assemblyInfo = freeTypeMathTable.getVerticalGlyphAssemblyForGlyph(glyph)
 
         if (assemblyInfo == null) {
             // No vertical assembly defined for glyph
@@ -485,12 +438,13 @@ class MTFontMathTable {
 
         val rv = mutableListOf<MTGlyphPart>()
         for (pi in assemblyInfo) {
-            val part = MTGlyphPart()
-            part.fullAdvance = fontUnitsToPt(pi.fullAdvance)
-            part.endConnectorLength = fontUnitsToPt(pi.endConnectorLength)
-            part.startConnectorLength = fontUnitsToPt(pi.startConnectorLength)
-            part.isExtender = pi.partFlags == 1
-            part.glyph = pi.glyph
+            val part = MTGlyphPart(
+                glyph = pi.glyph,
+                fullAdvance = fontUnitsToPt(pi.fullAdvance),
+                startConnectorLength = fontUnitsToPt(pi.startConnectorLength),
+                endConnectorLength = fontUnitsToPt(pi.endConnectorLength),
+                isExtender = pi.partFlags == 1
+            )
             rv.add(part)
         }
         return rv
