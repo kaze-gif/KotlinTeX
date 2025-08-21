@@ -18,7 +18,8 @@ class MTMathList {
         return atom.type != MTMathAtomType.KMTMathAtomBoundary
     }
 
-    fun addAtom(atom: MTMathAtom) {
+    fun addAtom(atom: MTMathAtom?) {
+        if (atom == null) return
         if (!isAtomAllowed(atom)) {
             val s = MTMathAtom.typeToText(atom.type)
             throw MathDisplayException("Cannot add atom of type $s in a mathList ")

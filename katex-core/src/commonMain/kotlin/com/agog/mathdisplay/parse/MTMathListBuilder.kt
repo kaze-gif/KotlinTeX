@@ -169,7 +169,7 @@ class MTMathListBuilder(str: String) {
                     if (applyModifier(command, prevAtom)) {
                         continue@outerLoop
                     }
-                    val fontStyle: MTFontStyle? = MTMathAtom.fontStyleWithName[command]
+                    val fontStyle: MTFontStyle? = MTMathAtom.fontStyles[command]
                     if (fontStyle != null) {
                         val oldSpacesAllowed: Boolean = spacesAllowed
                         // Text has special consideration where it allows spaces without escaping.
@@ -219,7 +219,7 @@ class MTMathListBuilder(str: String) {
                 else -> {
                     if (spacesAllowed && ch == ' ') {
                         // If spaces are allowed then spaces do not need escaping with a \ before being used.
-                        atom = MTMathAtom.atomForLatexSymbolName(" ")
+                        atom = MTMathAtom.atomForLatexSymbol(" ")
                     } else {
                         atom = MTMathAtom.atomForCharacter(ch)
                         if (atom == null) {
@@ -404,7 +404,7 @@ class MTMathListBuilder(str: String) {
             this.setError(MTParseErrors.MissingDelimiter, "Missing delimiter for $delimiterType")
             return null
         }
-        val boundary = MTMathAtom.boundaryAtomForDelimiterName(delimiter)
+        val boundary = MTMathAtom.boundary(delimiter)
         if (boundary == null) {
             this.setError(
                 MTParseErrors.InvalidDelimiter,
@@ -417,7 +417,7 @@ class MTMathListBuilder(str: String) {
     }
 
     private fun atomForCommand(command: String): MTMathAtom? {
-        val atom = MTMathAtom.atomForLatexSymbolName(command)
+        val atom = MTMathAtom.atomForLatexSymbol(command)
         if (atom != null) {
             return atom
         }
@@ -686,7 +686,7 @@ class MTMathListBuilder(str: String) {
             return null
         }
         val error = MTParseError()
-        val table: MTMathAtom? = MTMathAtom.tableWithEnvironment(newEnv.envName, rows, error)
+        val table: MTMathAtom? = MTMathAtom.table(newEnv.envName, rows, error)
 
         if (table == null) {
             parseError = error
@@ -732,7 +732,7 @@ class MTMathListBuilder(str: String) {
             )
 
         private fun delimiterToLatexString(delimiter: MTMathAtom): String {
-            val command: String? = MTMathAtom.delimiterNameForBoundaryAtom(delimiter)
+            val command: String? = MTMathAtom.getDelimiterName(delimiter)
             if (command != null) {
                 val singleChars: Array<String> =
                     arrayOf("(", ")", "[", "]", "<", ">", "|", ".", "/")
@@ -886,10 +886,10 @@ class MTMathListBuilder(str: String) {
                     str.append(accent.toLatexString())
                 } else if (atom.type == MTMathAtomType.KMTMathAtomLargeOperator) {
                     val op = atom as MTLargeOperator
-                    val command: String? = MTMathAtom.latexSymbolNameForAtom(atom)
+                    val command: String? = MTMathAtom.latexSymbolName(atom)
                     if (command != null) {
                         val originalOp: MTLargeOperator =
-                            MTMathAtom.atomForLatexSymbolName(command) as MTLargeOperator
+                            MTMathAtom.atomForLatexSymbol(command) as MTLargeOperator
                         str.append("\\$command ")
                         if (originalOp.hasLimits != op.hasLimits) {
                             if (op.hasLimits) {
@@ -922,7 +922,7 @@ class MTMathListBuilder(str: String) {
                     // math minus
                     str.append("-")
                 } else {
-                    val command = MTMathAtom.latexSymbolNameForAtom(atom)
+                    val command = MTMathAtom.latexSymbolName(atom)
                     if (command != null) {
                         str.append("\\$command ")
                     } else {
