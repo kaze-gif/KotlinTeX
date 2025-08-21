@@ -1,31 +1,23 @@
 package com.agog.mathdisplay.render
 
-object MTColor {
-    const val BLACK = 0xFF000000.toInt()
-    const val DARK_GRAY = 0xFF444444.toInt()
-    const val GRAY = 0xFF888888.toInt()
-    const val LIGHT_GRAY = 0xFFCCCCCC.toInt()
-    const val WHITE = 0xFFFFFFFF.toInt()
-    const val RED = 0xFFFF0000.toInt()
-    const val GREEN = 0xFF00FF00.toInt()
-    const val BLUE = 0xFF0000FF.toInt()
-    const val YELLOW = 0xFFFFFF00.toInt()
-    const val CYAN = 0xFF00FFFF.toInt()
-    const val MAGENTA = 0xFFFF00FF.toInt()
-    const val TRANSPARENT = 0
+import androidx.compose.ui.graphics.Color
 
+object MTColor {
     // 支持常用英文色名
     private val namedColors by lazy {
         mapOf(
-            "black" to BLACK,
-            "white" to WHITE,
-            "red" to RED,
-            "green" to GREEN,
-            "blue" to BLUE,
-            "yellow" to YELLOW,
-            "cyan" to CYAN,
-            "magenta" to MAGENTA,
-            "gray" to GRAY,
+            "black" to Color.Black.value,
+            "darkgray" to Color.DarkGray.value,
+            "gray" to Color.Gray.value,
+            "lightgray" to Color.LightGray.value,
+            "white" to Color.White.value,
+            "red" to Color.Red.value,
+            "green" to Color.Green.value,
+            "blue" to Color.Blue.value,
+            "yellow" to Color.Yellow.value,
+            "cyan" to Color.Cyan.value,
+            "magenta" to Color.Magenta.value,
+            "transparent" to Color.Transparent.value
         )
     }
 
@@ -33,8 +25,8 @@ object MTColor {
      * 通用字符串转Color
      * 支持 #RGB/#ARGB/#RRGGBB/#AARRGGBB，部分英文色名
      */
-    fun parseColor(colorString: String?): Int {
-        if (colorString == null) return TRANSPARENT
+    fun parseColor(colorString: String?): Color {
+        if (colorString == null) return Color.Transparent
         val str = colorString.trim()
 
         val colorInt = when {
@@ -75,9 +67,9 @@ object MTColor {
                 }
             }
 
-            namedColors.containsKey(str.lowercase()) -> namedColors[str.lowercase()]!!
+            namedColors.containsKey(str.lowercase()) -> namedColors[str.lowercase()]!!.toInt()
             else -> throw IllegalArgumentException("Unknown color format: $colorString")
         }
-        return colorInt
+        return Color(colorInt)
     }
 }

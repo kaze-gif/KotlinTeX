@@ -54,13 +54,13 @@ open class MTDisplay(
             positionChanged()
         }
 
-    var textColor: Int = MTColor.BLACK
+    var textColor: Color = Color.Black
         set(value) {
             field = value
             colorChanged()
         }
 
-    var localTextColor: Int = MTColor.TRANSPARENT
+    var localTextColor: Color = Color.Transparent
         set(value) {
             field = value
             colorChanged()
@@ -154,7 +154,7 @@ class MTCTLineDisplay(
         super.draw(canvas)
         val textPaint = createPlatformPaint()
         textPaint.isAntiAlias = true
-        textPaint.color = Color(textColor)
+        textPaint.color = textColor
         val drawer = MTDrawFreeType(font.mathTable)
 
         val glyphs = font.getGidListForString(str)
@@ -221,7 +221,7 @@ class MTMathListDisplay(
         if (sd != null) {
             for (displayAtom in sd.toList()) {
                 // set the global color, if there is no local color
-                if (displayAtom.localTextColor == MTColor.TRANSPARENT) {
+                if (displayAtom.localTextColor == Color.Transparent) {
                     displayAtom.textColor = this.textColor
                 } else {
                     displayAtom.textColor = displayAtom.localTextColor
@@ -360,7 +360,7 @@ class MTFractionDisplay(
         if (lineThickness != 0f) {
             val strokePaint = createPlatformPaint()
             strokePaint.isAntiAlias = true
-            strokePaint.color = Color(textColor)
+            strokePaint.color = textColor
             strokePaint.strokeWidth = lineThickness
             canvas.drawLine(
                 Offset(
@@ -469,7 +469,7 @@ class MTRadicalDisplay(
             // draw the horizontal line with the given thickness
             val strokePaint = createPlatformPaint()
             strokePaint.isAntiAlias = true
-            strokePaint.color = Color(textColor)
+            strokePaint.color = textColor
             strokePaint.strokeWidth = lineThickness
             strokePaint.strokeCap = StrokeCap.Round
             val x = radicalGlyph.width
@@ -493,7 +493,7 @@ class MTGlyphDisplay(
         super.draw(canvas)
         val textPaint = createPlatformPaint()
         textPaint.isAntiAlias = true
-        textPaint.color = Color(textColor)
+        textPaint.color = textColor
         val drawer = MTDrawFreeType(myFont.mathTable)
 
         canvas.withSave {
@@ -541,7 +541,7 @@ class MTGlyphConstructionDisplay(
             // positions these are x&y (0,offsets[i])
             val textPaint = createPlatformPaint()
             textPaint.isAntiAlias = true
-            textPaint.color = Color(textColor)
+            textPaint.color = textColor
             //textPaint.setTextSize(myFont.fontSize)
             //textPaint.setTypeface(myFont.typeface)
 
@@ -707,7 +707,7 @@ class MTLineDisplay(
         if (lineThickness != 0f) {
             val strokePaint = createPlatformPaint()
             strokePaint.isAntiAlias = true
-            strokePaint.color = Color(textColor)
+            strokePaint.color = textColor
             strokePaint.strokeWidth = lineThickness
             canvas.drawLine(
                 Offset(position.x, position.y + lineShiftUp),

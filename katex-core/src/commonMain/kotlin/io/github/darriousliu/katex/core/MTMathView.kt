@@ -7,7 +7,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.scale
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.TextStyle
@@ -274,7 +273,7 @@ private fun DrawScope.drawMathFormula(
     textColor: Color,
     textAlignment: MTTextAlignment
 ) {
-    displayList.textColor = textColor.toArgb()
+    displayList.textColor = textColor
 
     // 根据对齐方式计算 X 位置
     val textX = when (textAlignment) {
