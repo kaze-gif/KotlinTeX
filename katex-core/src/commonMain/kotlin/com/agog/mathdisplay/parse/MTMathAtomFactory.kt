@@ -723,7 +723,7 @@ open class MTMathAtomFactory {
                         value = chStr
                     )
 
-                char in listOf('.', '0'..'9') ->
+                char == '.' || char in '0'..'9' ->
                     return atomWithType(type = MTMathAtomType.KMTMathAtomNumber, value = chStr)
 
                 char in 'a'..'z' || char in 'A'..'Z' ->

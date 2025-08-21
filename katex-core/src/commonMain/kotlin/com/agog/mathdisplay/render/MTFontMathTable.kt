@@ -67,15 +67,15 @@ class MTFontMathTable {
     ) {
         this.fontSize = fontSize
         this.fontName = fontName
-        println("Loading math table from $fontPath")
+//        println("Loading math table from $fontPath")
         /* --- Init FreeType --- */
         /* get singleton */
         val library = FreeType.newLibrary()
             ?: throw MathDisplayException("Error initializing FreeType.")
-        println("FreeType library version: ${library.version}")
+//        println("FreeType library version: ${library.version}")
 
         this.freeFace = library.newFace(fontPath, 0)!!
-        println("FreeType face loaded: ${freeFace.familyName} (${freeFace.faceIndex})")
+//        println("FreeType face loaded: ${freeFace.familyName} (${freeFace.faceIndex})")
         checkFontSize()
         this.unitsPerEm = freeFace.unitsPerEM
         this.freeTypeMathTable = freeFace.loadMathTable()
@@ -90,7 +90,7 @@ class MTFontMathTable {
     ) {
         this.fontSize = fontSize
         this.fontName = fontName
-        println("Using existing math table for $fontName")
+//        println("Using existing math table for $fontName")
         this.unitsPerEm = unitsPerEm
         this.freeFace = freeFace
         this.freeTypeMathTable = freeTypeMathTable
