@@ -14,6 +14,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.darriousliu.katex.core.MTMathView
 import io.github.darriousliu.katex.core.MTMathViewMode
 import io.github.darriousliu.katex.mathdisplay.render.MTFontManager
+import io.github.darriousliu.katex.mathdisplay.render.MTMathFont
 import org.koin.compose.viewmodel.koinViewModel
 
 enum class LatexType {
@@ -52,9 +53,12 @@ fun LatexScreen(
                         onClick = {
                             currentFont = it ?: 0
                             mtFont = when (it) {
-                                0 -> MTFontManager.latinModernFontWithSize(fontSizePx)
-                                1 -> MTFontManager.termesFontWithSize(fontSizePx)
-                                2 -> MTFontManager.xitsFontWithSize(fontSizePx)
+                                0 -> MTFontManager.fontWithSize(fontSizePx, MTMathFont.LatinModernMath)
+                                1 -> MTFontManager.fontWithSize(
+                                    fontSizePx,
+                                    MTMathFont.TexGyreTermsMath
+                                )
+                                2 -> MTFontManager.fontWithSize(fontSizePx, MTMathFont.XitsMath)
                                 else -> mtFont
                             }
                         },

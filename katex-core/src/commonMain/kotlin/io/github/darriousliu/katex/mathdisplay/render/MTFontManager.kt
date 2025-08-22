@@ -24,19 +24,32 @@ object MTFontManager {
         }
     }
 
+    fun fontWithSize(size: Float, font: MTMathFont = MTMathFont.LatinModernMath): MTFont {
+        return fontWithName(font.fontName, size)
+    }
+
+    @Deprecated(
+        "Use fontWithSize instead",
+        ReplaceWith("fontWithSize(size, MTMathFont.LatinModernMath)")
+    )
     fun latinModernFontWithSize(size: Float): MTFont {
         return fontWithName("latinmodern-math", size)
     }
 
+    @Deprecated("Use fontWithSize instead", ReplaceWith("fontWithSize(size, MTMathFont.XitsMath)"))
     fun xitsFontWithSize(size: Float): MTFont {
         return fontWithName("xits-math", size)
     }
 
+    @Deprecated(
+        "Use fontWithSize instead",
+        ReplaceWith("fontWithSize(size, MTMathFont.TexGyreTermsMath)")
+    )
     fun termesFontWithSize(size: Float): MTFont {
         return fontWithName("texgyretermes-math", size)
     }
 
     fun defaultFont(): MTFont {
-        return latinModernFontWithSize(KDefaultFontSize)
+        return fontWithSize(KDefaultFontSize)
     }
 }

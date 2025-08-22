@@ -18,6 +18,11 @@ class MTFont {
         this.mathTable = mathTable
     }
 
+    constructor(fontSize: Float, fontName: String, fontData: ByteArray) {
+        this.fontSize = fontSize
+        this.mathTable = MTFontMathTable(fontSize, fontName, fontData)
+    }
+
     fun findGlyphForCharacterAtIndex(index: Int, str: String): CGGlyph {
         // Do we need to check with our font to see if this glyph is in the font?
         val codepoint = str.codePointAt(index)
