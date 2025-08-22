@@ -11,9 +11,9 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.agog.mathdisplay.utils.MTFontManager
 import io.github.darriousliu.katex.core.MTMathView
 import io.github.darriousliu.katex.core.MTMathViewMode
+import io.github.darriousliu.katex.mathdisplay.render.MTFontManager
 import org.koin.compose.viewmodel.koinViewModel
 
 enum class LatexType {

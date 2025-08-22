@@ -14,11 +14,11 @@ import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.*
-import com.agog.mathdisplay.parse.*
-import com.agog.mathdisplay.render.MTFont
-import com.agog.mathdisplay.render.MTMathListDisplay
-import com.agog.mathdisplay.render.MTTypesetter
-import com.agog.mathdisplay.utils.MTFontManager
+import io.github.darriousliu.katex.mathdisplay.parse.*
+import io.github.darriousliu.katex.mathdisplay.render.MTFont
+import io.github.darriousliu.katex.mathdisplay.render.MTMathListDisplay
+import io.github.darriousliu.katex.mathdisplay.render.MTTypesetter
+import io.github.darriousliu.katex.mathdisplay.render.MTFontManager
 
 /**
  * 共享数据类，用于管理 MTMathView 的状态
