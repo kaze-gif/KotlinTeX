@@ -1,5 +1,9 @@
 package io.github.darriousliu.katex.mathdisplay.render
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.withContext
+
 
 internal const val KDefaultFontSize = 20f
 
@@ -14,6 +18,25 @@ object MTFontManager {
         var f = nameToFontMap[name]
         if (f == null) {
             f = MTFont(size, name)
+            nameToFontMap[name] = f
+            return f
+        }
+        return if (f.fontSize == size) {
+            f
+        } else {
+            f.copyFontWithSize(size)
+        }
+    }
+
+    suspend fun fontWithData(
+        size: Float,
+        name: String,
+        loadFontData: suspend () -> ByteArray
+    ): MTFont {
+        var f = nameToFontMap[name]
+        if (f == null) {
+            val data = withContext(Dispatchers.IO) { loadFontData() }
+            f = MTFont(size, name, data)
             nameToFontMap[name] = f
             return f
         }
