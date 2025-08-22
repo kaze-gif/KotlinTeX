@@ -2,10 +2,10 @@ package io.github.darriousliu.katex.latex
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.agog.mathdisplay.parse.*
-import com.agog.mathdisplay.render.MTTypesetter
-import com.agog.mathdisplay.utils.MTFontManager
 import io.github.darriousliu.katex.core.MathItem
+import io.github.darriousliu.katex.mathdisplay.parse.*
+import io.github.darriousliu.katex.mathdisplay.render.MTFontManager
+import io.github.darriousliu.katex.mathdisplay.render.MTTypesetter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch

@@ -1,3 +1,3 @@
--keep class com.pvporbit.freetype.LibraryVersion { *; }
--keep class com.pvporbit.freetype.Kerning { *; }
--keep class com.pvporbit.freetype.FreeTypeAndroid { *; }
+-keep class io.github.darriousliu.katex.freetype.LibraryVersion { *; }
+-keep class io.github.darriousliu.katex.freetype.Kerning { *; }
+-keep class io.github.darriousliu.katex.freetype.FreeTypeAndroid { *; }

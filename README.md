@@ -185,6 +185,63 @@ fun LatexList(
 }
 ```
 
+3. 自定义字体
+
+同步加载预定义字体：
+
+```kotlin
+@Composable
+fun CustomFontLatexExample() {
+    val predefinedFont = rememberMTFont(
+        fontSize = 20.sp,
+        mathFont = MTMathFont.LatinModernMath,
+    )
+
+    MTMathView(
+        latex = "\\frac{a}{b}",
+        modifier = Modifier.fillMaxWidth(),
+        fontSize = 20.sp,
+        textColor = Color.Black,
+        font = predefinedFont,
+        mode = MTMathViewMode.KMTMathViewModeDisplay,
+        textAlignment = MTTextAlignment.KMTTextAlignmentLeft,
+        displayErrorInline = true,
+        errorFontSize = 20.sp,
+    )
+}
+```
+
+异步加载自定义字体并应用到 LaTeX 渲染中：
+
+```kotlin
+@Composable
+fun CustomFontLatexExample() {
+    val customFont by rememberMTFont(
+        fontSize = 20.sp,
+        fontName = "CustomFont"
+    ) {
+        // 在这里加载自定义字体文件
+        // 例如：Res.readBytes("files/fonts/CustomFont.otf")
+        Res.readBytes("files/fonts/CustomFont.otf")
+    }
+
+    // 确保字体加载完成后再渲染，否则会先使用默认字体，然后再切换到自定义字体
+    if (customFont != null) {
+        MTMathView(
+            latex = "\\frac{a}{b}",
+            modifier = Modifier.fillMaxWidth(),
+            fontSize = 20.sp,
+            textColor = Color.Black,
+            font = customFont,
+            mode = MTMathViewMode.KMTMathViewModeDisplay,
+            textAlignment = MTTextAlignment.KMTTextAlignmentLeft,
+            displayErrorInline = true,
+            errorFontSize = 20.sp,
+        )
+    }
+}
+```
+
 ## 自行构建
 
 ```shell script

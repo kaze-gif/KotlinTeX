@@ -11,9 +11,13 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.agog.mathdisplay.utils.MTFontManager
 import io.github.darriousliu.katex.core.MTMathView
 import io.github.darriousliu.katex.core.MTMathViewMode
+import io.github.darriousliu.katex.core.rememberMTFont
+import io.github.darriousliu.katex.mathdisplay.render.MTFontManager
+import io.github.darriousliu.katex.mathdisplay.render.MTMathFont
+import kotlintex.composeapp.generated.resources.Res
+import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 
 enum class LatexType {
@@ -31,6 +35,7 @@ fun LatexScreen(
     viewModel: LatexViewModel = koinViewModel<LatexViewModel>()
 ) {
     val density = LocalDensity.current
+    val scope = rememberCoroutineScope()
     var fontSize by remember { mutableStateOf(20.sp) }
     val fontSizePx = with(density) { fontSize.toPx() }
 
@@ -38,6 +43,9 @@ fun LatexScreen(
         mutableStateOf(MTFontManager.defaultFont())
     }
     var currentFont by remember { mutableIntStateOf(0) }
+    val font by rememberMTFont(fontSize, "Euler-Math") {
+        Res.readBytes("files/Euler-Math.otf")
+    }
 
     var mode by remember { mutableStateOf(MTMathViewMode.KMTMathViewModeDisplay) }
     var color by remember { mutableStateOf(Color.Black) }
@@ -51,11 +59,25 @@ fun LatexScreen(
                     MenuAction(
                         onClick = {
                             currentFont = it ?: 0
-                            mtFont = when (it) {
-                                0 -> MTFontManager.latinModernFontWithSize(fontSizePx)
-                                1 -> MTFontManager.termesFontWithSize(fontSizePx)
-                                2 -> MTFontManager.xitsFontWithSize(fontSizePx)
-                                else -> mtFont
+                            scope.launch {
+                                mtFont = when (it) {
+                                    0 -> MTFontManager.fontWithSize(
+                                        fontSizePx,
+                                        MTMathFont.LatinModernMath
+                                    )
+
+                                    1 -> MTFontManager.fontWithSize(
+                                        fontSizePx,
+                                        MTMathFont.TexGyreTermsMath
+                                    )
+
+                                    2 -> MTFontManager.fontWithSize(fontSizePx, MTMathFont.XitsMath)
+                                    3 -> MTFontManager.fontWithData(fontSizePx, "Euler-Math") {
+                                        Res.readBytes("files/Euler-Math.otf")
+                                    }
+
+                                    else -> mtFont
+                                }
                             }
                         },
                         text = "Font",
@@ -64,6 +86,7 @@ fun LatexScreen(
                             "Latin Modern Math" to 0,
                             "Tex Gyre Terms" to 1,
                             "XITS Math" to 2,
+                            "Euler Math" to 3,
                         )
                     )
                     // 改变字体大小
@@ -178,13 +201,15 @@ fun LatexScreen(
                         items = mathList,
                         key = { index, _ -> index }
                     ) { _, math ->
-                        MTMathView(
-                            mathList = math,
-                            fontSize = fontSize,
-                            font = mtFont,
-                            mode = mode,
-                            textColor = color,
-                        )
+                        if (font != null) {
+                            MTMathView(
+                                mathList = math,
+                                fontSize = fontSize,
+                                font = font,
+                                mode = mode,
+                                textColor = color,
+                            )
+                        }
                     }
                 }
 
