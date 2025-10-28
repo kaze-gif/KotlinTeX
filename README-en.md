@@ -57,7 +57,7 @@ Then, add the dependency in your `build.gradle.kts`:
 
 ```kotlin
 dependencies {
-    implementation("io.github.darriousliu:katex-core:0.3.1")
+    implementation("io.github.darriousliu:katex-core:0.3.2")
 }
 ```
 
@@ -67,7 +67,7 @@ dependencies {
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation("io.github.darriousliu:katex-core:0.3.1")
+            implementation("io.github.darriousliu:katex-core:0.3.2")
         }
     }
 }
@@ -186,6 +186,64 @@ fun LatexList(
                 errorFontSize = 20.sp,
             )
         }
+    }
+}
+```
+
+3. Custom fonts
+
+Load predefined fonts synchronously:
+
+```kotlin
+@Composable
+fun CustomFontLatexExample() {
+    val predefinedFont = rememberMTFont(
+        fontSize = 20.sp,
+        mathFont = MTMathFont.LatinModernMath,
+    )
+
+    MTMathView(
+        latex = "\\frac{a}{b}",
+        modifier = Modifier.fillMaxWidth(),
+        fontSize = 20.sp,
+        textColor = Color.Black,
+        font = predefinedFont,
+        mode = MTMathViewMode.KMTMathViewModeDisplay,
+        textAlignment = MTTextAlignment.KMTTextAlignmentLeft,
+        displayErrorInline = true,
+        errorFontSize = 20.sp,
+    )
+}
+```
+
+Asynchronously load custom fonts for LaTeX rendering:
+
+```kotlin
+@Composable
+fun CustomFontLatexExample() {
+    val customFont by rememberMTFont(
+        fontSize = 20.sp,
+        fontName = "CustomFont"
+    ) {
+        // Load custom font files here
+        // Example：Res.readBytes("files/fonts/CustomFont.otf")
+        Res.readBytes("files/fonts/CustomFont.otf")
+    }
+
+    // Make sure the font is loaded before rendering, 
+    // otherwise the default font will be used first and then switch to custom fonts
+    if (customFont != null) {
+        MTMathView(
+            latex = "\\frac{a}{b}",
+            modifier = Modifier.fillMaxWidth(),
+            fontSize = 20.sp,
+            textColor = Color.Black,
+            font = customFont,
+            mode = MTMathViewMode.KMTMathViewModeDisplay,
+            textAlignment = MTTextAlignment.KMTTextAlignmentLeft,
+            displayErrorInline = true,
+            errorFontSize = 20.sp,
+        )
     }
 }
 ```

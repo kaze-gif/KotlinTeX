@@ -2,7 +2,7 @@ package io.github.darriousliu.katex.core
 
 import android.content.Context
 import androidx.startup.Initializer
-import com.pvporbit.freetype.appContext
+import io.github.darriousliu.katex.utils.appContext
 
 class AppContextInitializer : Initializer<Unit> {
     override fun create(context: Context) {
