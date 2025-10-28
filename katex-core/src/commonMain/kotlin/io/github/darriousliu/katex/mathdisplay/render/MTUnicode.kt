@@ -1,70 +1,70 @@
 package io.github.darriousliu.katex.mathdisplay.render
 
-const val multiplication = '\u00D7'                     // ×
-const val division = '\u00F7'                           // ÷
-const val fractionSlash = '\u2044'                      // ⁄
-const val whiteSquare = '\u25A1'                        // □
-const val blackSquare = '\u25A0'                        // ■
-const val lessEqual = '\u2264'                          // ≤
-const val greaterEqual = '\u2265'                       // ≥
-const val notEqual = '\u2260'                           // ≠
-const val squareRoot = '\u221A'                         // √
-const val cubeRoot = '\u221B'                           // ∛
-const val infinity = '\u221E'                           // ∞
-const val angle = '\u2220'                              // ∠
-const val degree = '\u00B0'                             // °
+internal const val multiplication = '\u00D7'                     // ×
+internal const val division = '\u00F7'                           // ÷
+internal const val fractionSlash = '\u2044'                      // ⁄
+internal const val whiteSquare = '\u25A1'                        // □
+internal const val blackSquare = '\u25A0'                        // ■
+internal const val lessEqual = '\u2264'                          // ≤
+internal const val greaterEqual = '\u2265'                       // ≥
+internal const val notEqual = '\u2260'                           // ≠
+internal const val squareRoot = '\u221A'                         // √
+internal const val cubeRoot = '\u221B'                           // ∛
+internal const val infinity = '\u221E'                           // ∞
+internal const val angle = '\u2220'                              // ∠
+internal const val degree = '\u00B0'                             // °
 
-const val capitalGreekStart = '\u0391'                  // Α
-const val capitalGreekEnd = '\u03A9'                    // Ω
-const val lowerGreekStart = '\u03B1'                    // α
-const val lowerGreekEnd = '\u03C9'                      // ω
+internal const val capitalGreekStart = '\u0391'                  // Α
+internal const val capitalGreekEnd = '\u03A9'                    // Ω
+internal const val lowerGreekStart = '\u03B1'                    // α
+internal const val lowerGreekEnd = '\u03C9'                      // ω
 
 // mathit
-const val planksConstant = 0x210E                     // ℎ
+internal const val planksConstant = 0x210E                     // ℎ
 
 // 高位字符
-const val lowerItalicStart = 0x1D44E                    // 𝑎
-const val capitalItalicStart = 0x1D434                  // 𝐴
-const val greekLowerItalicStart = 0x1D6FC               // 𝞼
-const val greekCapitalItalicStart = 0x1D6E2             // 𝞢
-const val greekSymbolItalicStart = 0x1D716              // 𝞖
+internal const val lowerItalicStart = 0x1D44E                    // 𝑎
+internal const val capitalItalicStart = 0x1D434                  // 𝐴
+internal const val greekLowerItalicStart = 0x1D6FC               // 𝞼
+internal const val greekCapitalItalicStart = 0x1D6E2             // 𝞢
+internal const val greekSymbolItalicStart = 0x1D716              // 𝞖
 
 // mathbf
-const val mathCapitalBoldStart = 0x1D400                // 𝐀
-const val mathLowerBoldStart = 0x1D41A                  // 𝐚
-const val greekCapitalBoldStart = 0x1D6A8               // 𝚨
-const val greekLowerBoldStart = 0x1D6C2                 // 𝚲
-const val greekSymbolBoldStart = 0x1D6DC                // 𝞜
-const val numberBoldStart = 0x1D7CE                     // 𝟎
+internal const val mathCapitalBoldStart = 0x1D400                // 𝐀
+internal const val mathLowerBoldStart = 0x1D41A                  // 𝐚
+internal const val greekCapitalBoldStart = 0x1D6A8               // 𝚨
+internal const val greekLowerBoldStart = 0x1D6C2                 // 𝚲
+internal const val greekSymbolBoldStart = 0x1D6DC                // 𝞜
+internal const val numberBoldStart = 0x1D7CE                     // 𝟎
 
 // mathbfit
-const val mathCapitalBoldItalicStart = 0x1D468          // 𝑨
-const val mathLowerBoldItalicStart = 0x1D482            // 𝑎
-const val greekCapitalBoldItalicStart = 0x1D71C         // 𝞜
-const val greekLowerBoldItalicStart = 0x1D736           // 𝞼
-const val greekSymbolBoldItalicStart = 0x1D750          // 𝞸
+internal const val mathCapitalBoldItalicStart = 0x1D468          // 𝑨
+internal const val mathLowerBoldItalicStart = 0x1D482            // 𝑎
+internal const val greekCapitalBoldItalicStart = 0x1D71C         // 𝞜
+internal const val greekLowerBoldItalicStart = 0x1D736           // 𝞼
+internal const val greekSymbolBoldItalicStart = 0x1D750          // 𝞸
 
 
-const val mathCapitalScriptStart = 0x1D49C              // 𝒜
+internal const val mathCapitalScriptStart = 0x1D49C              // 𝒜
 
 // mathtt (monospace)
-const val mathCapitalTTStart = 0x1D670                  // 𝙰
-const val mathLowerTTStart = 0x1D68A                    // 𝚊
-const val numberTTStart = 0x1D7F6                       // 𝟶
+internal const val mathCapitalTTStart = 0x1D670                  // 𝙰
+internal const val mathLowerTTStart = 0x1D68A                    // 𝚊
+internal const val numberTTStart = 0x1D7F6                       // 𝟶
 
 // mathsf
-const val mathCapitalSansSerifStart = 0x1D5A0           // 𝗔
-const val mathLowerSansSerifStart = 0x1D5BA             // 𝗮
-const val numberSansSerifStart = 0x1D7E2                // 𝟢
+internal const val mathCapitalSansSerifStart = 0x1D5A0           // 𝗔
+internal const val mathLowerSansSerifStart = 0x1D5BA             // 𝗮
+internal const val numberSansSerifStart = 0x1D7E2                // 𝟢
 
 // mathfrak
-const val mathCapitalFrakturStart = 0x1D504             // 𝔄
-const val mathLowerFrakturStart = 0x1D51E               // 𝔞
+internal const val mathCapitalFrakturStart = 0x1D504             // 𝔄
+internal const val mathLowerFrakturStart = 0x1D51E               // 𝔞
 
 // mathbb (double struck)
-const val mathCapitalBlackboardStart = 0x1D538          // 𝔸
-const val mathLowerBlackboardStart = 0x1D552            // 𝕒
-const val numberBlackboardStart = 0x1D7D8               // 𝟘
+internal const val mathCapitalBlackboardStart = 0x1D538          // 𝔸
+internal const val mathLowerBlackboardStart = 0x1D552            // 𝕒
+internal const val numberBlackboardStart = 0x1D7D8               // 𝟘
 
 
 // Note this is not equivalent to ch.isLowerCase() delta is a test case

@@ -2,13 +2,18 @@ package io.github.darriousliu.katex.mathdisplay.render
 
 import io.github.darriousliu.katex.mathdisplay.parse.MTMathAtomType
 import io.github.darriousliu.katex.mathdisplay.parse.MathDisplayException
-import io.github.darriousliu.katex.mathdisplay.render.MTInterElementSpaceType.*
+import io.github.darriousliu.katex.mathdisplay.render.MTInterElementSpaceType.KMTSpaceInvalid
+import io.github.darriousliu.katex.mathdisplay.render.MTInterElementSpaceType.KMTSpaceNSMedium
+import io.github.darriousliu.katex.mathdisplay.render.MTInterElementSpaceType.KMTSpaceNSThick
+import io.github.darriousliu.katex.mathdisplay.render.MTInterElementSpaceType.KMTSpaceNSThin
+import io.github.darriousliu.katex.mathdisplay.render.MTInterElementSpaceType.KMTSpaceNone
+import io.github.darriousliu.katex.mathdisplay.render.MTInterElementSpaceType.KMTSpaceThin
 
 /**
  * Created by greg on 3/13/18.
  */
 
-enum class MTInterElementSpaceType {
+internal enum class MTInterElementSpaceType {
     KMTSpaceInvalid,
     KMTSpaceNone,
     KMTSpaceThin,
@@ -17,7 +22,7 @@ enum class MTInterElementSpaceType {
     KMTSpaceNSThick
 }
 
-val interElementSpaceArray: Array<Array<MTInterElementSpaceType>> = arrayOf(
+internal val interElementSpaceArray: Array<Array<MTInterElementSpaceType>> = arrayOf(
     //   ordinary             operator             binary               relation            open                 close               punct               // fraction
     arrayOf(
         KMTSpaceNone,
@@ -113,7 +118,7 @@ val interElementSpaceArray: Array<Array<MTInterElementSpaceType>> = arrayOf(
 
 
 // Get's the index for the given type. If row is true, the index is for the row (i.e. left element) otherwise it is for the column (right element)
-fun getInterElementSpaceArrayIndexForType(type: MTMathAtomType, row: Boolean): Int {
+internal fun getInterElementSpaceArrayIndexForType(type: MTMathAtomType, row: Boolean): Int {
     when (type) {
         // A placeholder is treated as ordinary
         MTMathAtomType.KMTMathAtomColor, MTMathAtomType.KMTMathAtomTextColor, MTMathAtomType.KMTMathAtomOrdinary, MTMathAtomType.KMTMathAtomPlaceholder -> return 0

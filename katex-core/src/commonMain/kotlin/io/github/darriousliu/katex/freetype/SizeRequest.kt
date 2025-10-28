@@ -1,6 +1,6 @@
 package io.github.darriousliu.katex.freetype
 
-class SizeRequest(
+internal class SizeRequest(
     type: FreeTypeConstants.FT_Size_Request_Type,
     val width: Int,
     val height: Int,

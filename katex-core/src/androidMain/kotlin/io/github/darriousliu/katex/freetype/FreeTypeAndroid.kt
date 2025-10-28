@@ -4,7 +4,7 @@ package io.github.darriousliu.katex.freetype
 
 import java.nio.ByteBuffer
 
-object FreeTypeAndroid : IFreeType {
+internal object FreeTypeAndroid : IFreeType {
     init {
         loadLibrary()
     }

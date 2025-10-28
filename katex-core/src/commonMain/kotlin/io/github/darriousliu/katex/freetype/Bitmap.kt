@@ -1,6 +1,6 @@
 package io.github.darriousliu.katex.freetype
 
-class Bitmap(pointer: Long) : Pointer(pointer) {
+internal class Bitmap(pointer: Long) : Pointer(pointer) {
     val width: Int
         get() = FreeType.bitmapGetWidth(pointer)
     val rows: Int

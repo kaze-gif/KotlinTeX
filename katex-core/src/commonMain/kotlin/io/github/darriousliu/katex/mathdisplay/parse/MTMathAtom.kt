@@ -12,7 +12,7 @@ class MathDisplayException(override var message: String) : Exception(message)
 The type of the atom determines how it is rendered, and spacing between the atoms.
  */
 
-enum class MTMathAtomType {
+internal enum class MTMathAtomType {
     // A non-atom
     KMTMathAtomNone,
 
@@ -92,9 +92,9 @@ enum class MTMathAtomType {
     KMTMathAtomTable
 }
 
-const val NSNotFound: Int = -1
+internal const val NSNotFound: Int = -1
 
-data class NSRange(
+internal data class NSRange(
     var location: Int = NSNotFound,
     var length: Int = 0
 ) {
@@ -114,7 +114,7 @@ data class NSRange(
     }
 }
 
-enum class MTFontStyle {
+internal enum class MTFontStyle {
     /// The default latex rendering style. i.e. variables are italic and numbers are roman.
     KMTFontStyleDefault,
 
@@ -165,7 +165,7 @@ constructor
 
  */
 
-open class MTMathAtom(
+internal open class MTMathAtom(
     var type: MTMathAtomType,
     var nucleus: String
 ) {
@@ -435,7 +435,7 @@ open class MTMathAtom(
 
 // Fractions have no nucleus and are always KMTMathAtomFraction type
 
-class MTFraction() : MTMathAtom(MTMathAtomType.KMTMathAtomFraction, "") {
+internal class MTFraction() : MTMathAtom(MTMathAtomType.KMTMathAtomFraction, "") {
 
     /// Numerator of the fraction
     var numerator: MTMathList? = null
@@ -507,7 +507,7 @@ class MTFraction() : MTMathAtom(MTMathAtomType.KMTMathAtomFraction, "") {
 }
 
 // Radicals have no nucleus and are always KMTMathAtomRadical type
-class MTRadical : MTMathAtom(MTMathAtomType.KMTMathAtomRadical, "") {
+internal class MTRadical : MTMathAtom(MTMathAtomType.KMTMathAtomRadical, "") {
 
     /// Denotes the degree of the radical, i.e. the value to the top left of the radical sign
     /// This can be null if there is no degree.
@@ -558,7 +558,7 @@ class MTRadical : MTMathAtom(MTMathAtomType.KMTMathAtomRadical, "") {
 }
 
 
-class MTLargeOperator(nucleus: String) :
+internal class MTLargeOperator(nucleus: String) :
     MTMathAtom(MTMathAtomType.KMTMathAtomLargeOperator, nucleus) {
     var hasLimits = false
 
@@ -574,14 +574,14 @@ class MTLargeOperator(nucleus: String) :
 }
 
 // Inners have no nucleus and are always KMTMathAtomInner type
-class MTInner : MTMathAtom(MTMathAtomType.KMTMathAtomInner, "") {
+internal class MTInner : MTMathAtom(MTMathAtomType.KMTMathAtomInner, "") {
 
 
     /// The inner math list
     var innerList: MTMathList? = null
 
     /// The left boundary atom. This must be a node of type KMTMathAtomBoundary
-    var leftBoundary: MTMathAtom? = null
+    internal var leftBoundary: MTMathAtom? = null
         set(value) {
             if (value != null && value.type != MTMathAtomType.KMTMathAtomBoundary) {
                 throw MathDisplayException("Left boundary must be of type KMTMathAtomBoundary $value")
@@ -590,7 +590,7 @@ class MTInner : MTMathAtom(MTMathAtomType.KMTMathAtomInner, "") {
         }
 
     /// The right boundary atom. This must be a node of type KMTMathAtomBoundary
-    var rightBoundary: MTMathAtom? = null
+    internal var rightBoundary: MTMathAtom? = null
         set(value) {
             if (value != null && value.type != MTMathAtomType.KMTMathAtomBoundary) {
                 throw MathDisplayException("Right boundary must be of type KMTMathAtomBoundary $value")
@@ -643,7 +643,7 @@ class MTInner : MTMathAtom(MTMathAtomType.KMTMathAtomInner, "") {
 }
 
 // OverLines have no nucleus and are always KMTMathAtomOverline type
-class MTOverLine : MTMathAtom(MTMathAtomType.KMTMathAtomOverline, "") {
+internal class MTOverLine : MTMathAtom(MTMathAtomType.KMTMathAtomOverline, "") {
 
 
     /// The inner math list
@@ -677,7 +677,7 @@ class MTOverLine : MTMathAtom(MTMathAtomType.KMTMathAtomOverline, "") {
 }
 
 // UnderLines have no nucleus and are always KMTMathAtomUnderline type
-class MTUnderLine : MTMathAtom(MTMathAtomType.KMTMathAtomUnderline, "") {
+internal class MTUnderLine : MTMathAtom(MTMathAtomType.KMTMathAtomUnderline, "") {
 
 
     /// The inner math list
@@ -710,7 +710,7 @@ class MTUnderLine : MTMathAtom(MTMathAtomType.KMTMathAtomUnderline, "") {
 }
 
 // Accents  are always KMTMathAtomUnderline type
-class MTAccent(nucleus: String) : MTMathAtom(MTMathAtomType.KMTMathAtomAccent, nucleus) {
+internal class MTAccent(nucleus: String) : MTMathAtom(MTMathAtomType.KMTMathAtomAccent, nucleus) {
 
 
     /// The inner math list
@@ -743,7 +743,7 @@ class MTAccent(nucleus: String) : MTMathAtom(MTMathAtomType.KMTMathAtomAccent, n
 }
 
 // Spaces  are  KMTMathAtomSpace with a float for space and no nucleus
-class MTMathSpace() : MTMathAtom(MTMathAtomType.KMTMathAtomSpace, "") {
+internal class MTMathSpace() : MTMathAtom(MTMathAtomType.KMTMathAtomSpace, "") {
 
     var space: Float = 0.0f
 
@@ -780,7 +780,7 @@ enum class MTLineStyle {
 }
 
 // Styles are  KMTMathAtomStyle with a MTLineStyle and no nucleus
-class MTMathStyle() : MTMathAtom(MTMathAtomType.KMTMathAtomStyle, "") {
+internal class MTMathStyle() : MTMathAtom(MTMathAtomType.KMTMathAtomStyle, "") {
 
     var style: MTLineStyle = MTLineStyle.KMTLineStyleDisplay
 
@@ -798,7 +798,7 @@ class MTMathStyle() : MTMathAtom(MTMathAtomType.KMTMathAtomStyle, "") {
 
 
 // Colors are always KMTMathAtomColor type with a string for the color
-class MTMathColor : MTMathAtom(MTMathAtomType.KMTMathAtomColor, "") {
+internal class MTMathColor : MTMathAtom(MTMathAtomType.KMTMathAtomColor, "") {
 
 
     /// The inner math list
@@ -833,7 +833,7 @@ class MTMathColor : MTMathAtom(MTMathAtomType.KMTMathAtomColor, "") {
 
 
 // Colors are always KMTMathAtomColor type with a string for the color
-class MTMathTextColor : MTMathAtom(MTMathAtomType.KMTMathAtomTextColor, "") {
+internal class MTMathTextColor : MTMathAtom(MTMathAtomType.KMTMathAtomTextColor, "") {
 
 
     /// The inner math list

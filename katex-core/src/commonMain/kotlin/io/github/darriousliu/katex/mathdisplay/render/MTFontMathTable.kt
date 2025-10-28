@@ -1,10 +1,10 @@
 package io.github.darriousliu.katex.mathdisplay.render
 
-import io.github.darriousliu.katex.mathdisplay.parse.MathDisplayException
 import io.github.darriousliu.katex.freetype.Face
 import io.github.darriousliu.katex.freetype.FreeType
 import io.github.darriousliu.katex.freetype.FreeTypeConstants.FT_LOAD_NO_SCALE
 import io.github.darriousliu.katex.freetype.MTFreeTypeMathTable
+import io.github.darriousliu.katex.mathdisplay.parse.MathDisplayException
 
 data class MTGlyphPart(
     val glyph: Int = 0,
@@ -57,8 +57,8 @@ class MTFontMathTable {
 
     val unitsPerEm: Int
 
-    val freeFace: Face
-    val freeTypeMathTable: MTFreeTypeMathTable
+    private val freeFace: Face
+    private val freeTypeMathTable: MTFreeTypeMathTable
 
     constructor(
         fontSize: Float,
@@ -96,7 +96,7 @@ class MTFontMathTable {
         this.freeTypeMathTable = freeFace.loadMathTable()
     }
 
-    constructor(
+    internal constructor(
         fontSize: Float,
         fontName: String,
         unitsPerEm: Int,
@@ -111,7 +111,7 @@ class MTFontMathTable {
         this.freeTypeMathTable = freeTypeMathTable
     }
 
-    fun checkFontSize(): Face {
+    internal fun checkFontSize(): Face {
         freeFace.setCharSize(0, (fontSize * 64).toInt(), 0, 0)
         return freeFace
     }

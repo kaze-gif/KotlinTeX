@@ -72,7 +72,7 @@ private val constTable = arrayOf(
     "uint16", "RadicalDegreeBottomRaisePercent"
 )
 
-class MTFreeTypeMathTable(val pointer: Long, val data: NativeBinaryBuffer) {
+internal class MTFreeTypeMathTable(val pointer: Long, val data: NativeBinaryBuffer) {
     private val constants: HashMap<String, Int> = hashMapOf()
     private val italicsCorrectionInfo: HashMap<Int, Int> = hashMapOf()
     private val topAccentAttachment: HashMap<Int, Int> = hashMapOf()

@@ -1,6 +1,6 @@
 package io.github.darriousliu.katex.freetype
 
-class GlyphMetrics(pointer: Long) : Pointer(pointer) {
+internal class GlyphMetrics(pointer: Long) : Pointer(pointer) {
     val width: Long
         get() = FreeType.glyphMetricsGetWidth(pointer)
 

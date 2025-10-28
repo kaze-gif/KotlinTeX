@@ -4,10 +4,21 @@ package io.github.darriousliu.katex.freetype
 
 import freetype.FT_Face
 import freetype.TTAG_MATH
-import kotlinx.cinterop.*
+import kotlinx.cinterop.ByteVar
+import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.cinterop.ULongVar
+import kotlinx.cinterop.alloc
+import kotlinx.cinterop.allocArray
+import kotlinx.cinterop.get
+import kotlinx.cinterop.memScoped
+import kotlinx.cinterop.ptr
+import kotlinx.cinterop.reinterpret
+import kotlinx.cinterop.toCPointer
+import kotlinx.cinterop.toKString
+import kotlinx.cinterop.useContents
 import platform.posix.free
 
-object FreeTypeIos : IFreeType {
+internal object FreeTypeIos : IFreeType {
     override fun init(): Long {
         return freetype.initLibrary()
     }

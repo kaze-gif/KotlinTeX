@@ -1,7 +1,7 @@
 package io.github.darriousliu.katex.freetype
 
 
-interface IFreeType {
+internal interface IFreeType {
     fun newLibrary(): Library? {
         val library = FreeType.init()
         if (library == 0L) {

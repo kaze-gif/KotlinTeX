@@ -4,7 +4,7 @@ package io.github.darriousliu.katex.freetype
 
 import io.github.darriousliu.katex.freetype.FreeTypeConstants.FT_Kerning_Mode
 
-class Face(pointer: Long) : Pointer(pointer) {
+internal class Face(pointer: Long) : Pointer(pointer) {
     private var data: NativeBinaryBuffer? = null
 
     constructor(pointer: Long, data: NativeBinaryBuffer?) : this(pointer) {

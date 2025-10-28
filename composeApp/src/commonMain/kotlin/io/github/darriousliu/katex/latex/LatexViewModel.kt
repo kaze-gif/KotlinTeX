@@ -3,7 +3,11 @@ package io.github.darriousliu.katex.latex
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.darriousliu.katex.core.MathItem
-import io.github.darriousliu.katex.mathdisplay.parse.*
+import io.github.darriousliu.katex.mathdisplay.parse.MTLineStyle
+import io.github.darriousliu.katex.mathdisplay.parse.MTMathList
+import io.github.darriousliu.katex.mathdisplay.parse.MTMathListBuilder
+import io.github.darriousliu.katex.mathdisplay.parse.MTParseError
+import io.github.darriousliu.katex.mathdisplay.parse.MTParseErrors
 import io.github.darriousliu.katex.mathdisplay.render.MTFontManager
 import io.github.darriousliu.katex.mathdisplay.render.MTTypesetter
 import kotlinx.coroutines.Dispatchers
@@ -241,6 +245,8 @@ a = \begin{cases} \nabla \cdot \mathbf{E} = \frac{\rho}{\epsilon_0} \end{cases}
 # box
 \Box{2} + \Box{3} = \Box{5}
 \boxed{2} + \boxed{3} = \boxed{5}
+
+f(x) &= \frac{1}{\sqrt{2\pi\sigma^2}} \int_{-\infty}^{\infty} e^{-\frac{(t - \mu)^2}{2\sigma^2}} \, dt \\&= \text{Some explanation here}
 
 """.lines()
     .filter { !it.startsWith("#") && it.isNotBlank() }

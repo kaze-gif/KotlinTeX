@@ -15,7 +15,7 @@ import io.github.darriousliu.katex.utils.toFixed
 
 // NSString *const MTParseError = "ParseError"
 
-data class MTEnvProperties(
+private data class MTEnvProperties(
     var envName: String?,
     var ended: Boolean = false,
     var numRows: Long = 0

@@ -2,7 +2,7 @@ package io.github.darriousliu.katex.freetype
 
 import io.github.darriousliu.katex.freetype.FreeTypeConstants.FT_Render_Mode
 
-class GlyphSlot(pointer: Long) : Pointer(pointer) {
+internal class GlyphSlot(pointer: Long) : Pointer(pointer) {
     val bitmap: Bitmap?
         get() {
             val bitmap = FreeType.glyphSlotGetBitmap(pointer)

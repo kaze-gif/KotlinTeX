@@ -1,8 +1,14 @@
 package io.github.darriousliu.katex.mathdisplay.parse
 
-import io.github.darriousliu.katex.mathdisplay.render.*
+import io.github.darriousliu.katex.mathdisplay.render.blackSquare
+import io.github.darriousliu.katex.mathdisplay.render.division
+import io.github.darriousliu.katex.mathdisplay.render.greaterEqual
+import io.github.darriousliu.katex.mathdisplay.render.lessEqual
+import io.github.darriousliu.katex.mathdisplay.render.multiplication
+import io.github.darriousliu.katex.mathdisplay.render.notEqual
+import io.github.darriousliu.katex.mathdisplay.render.whiteSquare
 
-open class MTMathAtomFactory {
+internal open class MTMathAtomFactory {
     val aliases: Map<String, String> = hashMapOf(
         "lnot" to "neg",
         "land" to "wedge",

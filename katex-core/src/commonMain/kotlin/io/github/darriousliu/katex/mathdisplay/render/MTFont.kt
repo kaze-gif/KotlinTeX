@@ -5,10 +5,10 @@ import io.github.darriousliu.katex.utils.codePointAt
 
 
 class MTFont {
-    val fontSize: Float
-    val mathTable: MTFontMathTable
+    internal val fontSize: Float
+    internal val mathTable: MTFontMathTable
 
-    constructor(fontSize: Float, fontName: String) {
+    internal constructor(fontSize: Float, fontName: String) {
         this.fontSize = fontSize
         this.mathTable = MTFontMathTable(fontSize, fontName, "files/fonts/$fontName.otf")
     }

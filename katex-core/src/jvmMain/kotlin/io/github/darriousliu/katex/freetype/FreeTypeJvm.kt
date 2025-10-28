@@ -8,7 +8,7 @@ import org.lwjgl.util.freetype.FreeType.*
 import java.nio.ByteOrder
 import kotlin.math.absoluteValue
 
-object FreeTypeJvm : IFreeType {
+internal object FreeTypeJvm : IFreeType {
     private val faceCache = mutableMapOf<Long, FT_Face>()
 
     private fun getFaceFromCache(face: Long): FT_Face {

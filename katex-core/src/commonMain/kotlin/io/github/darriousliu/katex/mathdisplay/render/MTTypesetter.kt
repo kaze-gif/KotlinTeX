@@ -1,10 +1,61 @@
 package io.github.darriousliu.katex.mathdisplay.render
 
-import io.github.darriousliu.katex.mathdisplay.parse.*
-import io.github.darriousliu.katex.mathdisplay.parse.MTColumnAlignment.*
-import io.github.darriousliu.katex.mathdisplay.parse.MTLineStyle.*
-import io.github.darriousliu.katex.mathdisplay.parse.MTMathAtomType.*
-import io.github.darriousliu.katex.mathdisplay.render.MTInterElementSpaceType.*
+import io.github.darriousliu.katex.mathdisplay.parse.MTAccent
+import io.github.darriousliu.katex.mathdisplay.parse.MTColumnAlignment.KMTColumnAlignmentCenter
+import io.github.darriousliu.katex.mathdisplay.parse.MTColumnAlignment.KMTColumnAlignmentLeft
+import io.github.darriousliu.katex.mathdisplay.parse.MTColumnAlignment.KMTColumnAlignmentRight
+import io.github.darriousliu.katex.mathdisplay.parse.MTFraction
+import io.github.darriousliu.katex.mathdisplay.parse.MTInner
+import io.github.darriousliu.katex.mathdisplay.parse.MTLargeOperator
+import io.github.darriousliu.katex.mathdisplay.parse.MTLineStyle
+import io.github.darriousliu.katex.mathdisplay.parse.MTLineStyle.KMTLineStyleDisplay
+import io.github.darriousliu.katex.mathdisplay.parse.MTLineStyle.KMTLineStyleScript
+import io.github.darriousliu.katex.mathdisplay.parse.MTLineStyle.KMTLineStyleScriptScript
+import io.github.darriousliu.katex.mathdisplay.parse.MTLineStyle.KMTLineStyleText
+import io.github.darriousliu.katex.mathdisplay.parse.MTMathAtom
+import io.github.darriousliu.katex.mathdisplay.parse.MTMathAtomType
+import io.github.darriousliu.katex.mathdisplay.parse.MTMathAtomType.KMTMathAtomAccent
+import io.github.darriousliu.katex.mathdisplay.parse.MTMathAtomType.KMTMathAtomBinaryOperator
+import io.github.darriousliu.katex.mathdisplay.parse.MTMathAtomType.KMTMathAtomBoundary
+import io.github.darriousliu.katex.mathdisplay.parse.MTMathAtomType.KMTMathAtomClose
+import io.github.darriousliu.katex.mathdisplay.parse.MTMathAtomType.KMTMathAtomColor
+import io.github.darriousliu.katex.mathdisplay.parse.MTMathAtomType.KMTMathAtomFraction
+import io.github.darriousliu.katex.mathdisplay.parse.MTMathAtomType.KMTMathAtomInner
+import io.github.darriousliu.katex.mathdisplay.parse.MTMathAtomType.KMTMathAtomLargeOperator
+import io.github.darriousliu.katex.mathdisplay.parse.MTMathAtomType.KMTMathAtomNone
+import io.github.darriousliu.katex.mathdisplay.parse.MTMathAtomType.KMTMathAtomNumber
+import io.github.darriousliu.katex.mathdisplay.parse.MTMathAtomType.KMTMathAtomOpen
+import io.github.darriousliu.katex.mathdisplay.parse.MTMathAtomType.KMTMathAtomOrdinary
+import io.github.darriousliu.katex.mathdisplay.parse.MTMathAtomType.KMTMathAtomOverline
+import io.github.darriousliu.katex.mathdisplay.parse.MTMathAtomType.KMTMathAtomPlaceholder
+import io.github.darriousliu.katex.mathdisplay.parse.MTMathAtomType.KMTMathAtomPunctuation
+import io.github.darriousliu.katex.mathdisplay.parse.MTMathAtomType.KMTMathAtomRadical
+import io.github.darriousliu.katex.mathdisplay.parse.MTMathAtomType.KMTMathAtomRelation
+import io.github.darriousliu.katex.mathdisplay.parse.MTMathAtomType.KMTMathAtomSpace
+import io.github.darriousliu.katex.mathdisplay.parse.MTMathAtomType.KMTMathAtomStyle
+import io.github.darriousliu.katex.mathdisplay.parse.MTMathAtomType.KMTMathAtomTable
+import io.github.darriousliu.katex.mathdisplay.parse.MTMathAtomType.KMTMathAtomTextColor
+import io.github.darriousliu.katex.mathdisplay.parse.MTMathAtomType.KMTMathAtomUnaryOperator
+import io.github.darriousliu.katex.mathdisplay.parse.MTMathAtomType.KMTMathAtomUnderline
+import io.github.darriousliu.katex.mathdisplay.parse.MTMathAtomType.KMTMathAtomVariable
+import io.github.darriousliu.katex.mathdisplay.parse.MTMathColor
+import io.github.darriousliu.katex.mathdisplay.parse.MTMathList
+import io.github.darriousliu.katex.mathdisplay.parse.MTMathSpace
+import io.github.darriousliu.katex.mathdisplay.parse.MTMathStyle
+import io.github.darriousliu.katex.mathdisplay.parse.MTMathTable
+import io.github.darriousliu.katex.mathdisplay.parse.MTMathTextColor
+import io.github.darriousliu.katex.mathdisplay.parse.MTOverLine
+import io.github.darriousliu.katex.mathdisplay.parse.MTRadical
+import io.github.darriousliu.katex.mathdisplay.parse.MTUnderLine
+import io.github.darriousliu.katex.mathdisplay.parse.MathDisplayException
+import io.github.darriousliu.katex.mathdisplay.parse.NSNotFound
+import io.github.darriousliu.katex.mathdisplay.parse.NSRange
+import io.github.darriousliu.katex.mathdisplay.render.MTInterElementSpaceType.KMTSpaceInvalid
+import io.github.darriousliu.katex.mathdisplay.render.MTInterElementSpaceType.KMTSpaceNSMedium
+import io.github.darriousliu.katex.mathdisplay.render.MTInterElementSpaceType.KMTSpaceNSThick
+import io.github.darriousliu.katex.mathdisplay.render.MTInterElementSpaceType.KMTSpaceNSThin
+import io.github.darriousliu.katex.mathdisplay.render.MTInterElementSpaceType.KMTSpaceNone
+import io.github.darriousliu.katex.mathdisplay.render.MTInterElementSpaceType.KMTSpaceThin
 import io.github.darriousliu.katex.utils.codePointCount
 
 
@@ -26,15 +77,15 @@ class MTTypesetter(
     var spaced: Boolean = false
 )
 {
-    var displayAtoms: MutableList<MTDisplay> = mutableListOf()
-    val currentPosition: CGPoint = CGPoint(0f, 0f)
-    var currentLine: String = ""
-    var currentAtoms: MutableList<MTMathAtom> =
+    private val displayAtoms: MutableList<MTDisplay> = mutableListOf()
+    private val currentPosition: CGPoint = CGPoint(0f, 0f)
+    private var currentLine: String = ""
+    private var currentAtoms: MutableList<MTMathAtom> =
         mutableListOf()    // List of atoms that make the line
-    var currentLineIndexRange: NSRange = NSRange()
-    var styleFont: MTFont = font
+    private var currentLineIndexRange: NSRange = NSRange()
+    private var styleFont: MTFont = font
 
-    var style: MTLineStyle = KMTLineStyleDisplay
+    private var style: MTLineStyle = KMTLineStyleDisplay
         set(value) {
             field = value
             this.styleFont = this.font.copyFontWithSize(getStyleSize(value, font))
@@ -81,7 +132,7 @@ class MTTypesetter(
             return line
         }
 
-        fun preprocessMathList(ml: MTMathList): MutableList<MTMathAtom> {
+        private fun preprocessMathList(ml: MTMathList): MutableList<MTMathAtom> {
             // Note: Some of the preprocessing described by the TeX algorithm is done in the finalize method of MTMathList.
             // Specifically rules 5 & 6 in Appendix G are handled by finalize.
             // This function does not do a complete preprocessing as specified by TeX either. It removes any special atom types

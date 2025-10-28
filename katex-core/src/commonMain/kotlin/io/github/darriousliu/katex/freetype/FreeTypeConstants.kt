@@ -1,6 +1,6 @@
 package io.github.darriousliu.katex.freetype
 
-object FreeTypeConstants {
+internal object FreeTypeConstants {
     /* FT_LOAD_* (Load Char flags) */
     const val FT_LOAD_DEFAULT = 0x0
     const val FT_LOAD_NO_SCALE = (1 shl 0)

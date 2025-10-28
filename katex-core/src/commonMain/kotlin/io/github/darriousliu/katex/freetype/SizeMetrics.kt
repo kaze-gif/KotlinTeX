@@ -1,6 +1,6 @@
 package io.github.darriousliu.katex.freetype
 
-class SizeMetrics constructor(pointer: Long) : Pointer(pointer) {
+internal class SizeMetrics constructor(pointer: Long) : Pointer(pointer) {
     val ascender: Long
         get() = FreeType.sizeMetricsGetAscender(pointer)
 

@@ -1,16 +1,16 @@
 package io.github.darriousliu.katex.mathdisplay.parse
 
 class MTMathList {
-    var atoms = mutableListOf<MTMathAtom>()
+    internal var atoms = mutableListOf<MTMathAtom>()
 
 
-    constructor(vararg alist: MTMathAtom) {
+    internal constructor(vararg alist: MTMathAtom) {
         for (atom in alist) {
             atoms.add(atom)
         }
     }
 
-    constructor(alist: MutableList<MTMathAtom>) {
+    internal constructor(alist: MutableList<MTMathAtom>) {
         atoms.addAll(alist)
     }
 
@@ -18,7 +18,7 @@ class MTMathList {
         return atom.type != MTMathAtomType.KMTMathAtomBoundary
     }
 
-    fun addAtom(atom: MTMathAtom?) {
+    internal fun addAtom(atom: MTMathAtom?) {
         if (atom == null) return
         if (!isAtomAllowed(atom)) {
             val s = MTMathAtom.typeToText(atom.type)
@@ -27,7 +27,7 @@ class MTMathList {
         atoms.add(atom)
     }
 
-    fun insertAtom(atom: MTMathAtom, index: Int) {
+    internal fun insertAtom(atom: MTMathAtom, index: Int) {
         if (!isAtomAllowed(atom)) {
             val s = MTMathAtom.typeToText(atom.type)
             throw MathDisplayException("Cannot add atom of type $s in a mathList ")
@@ -35,7 +35,7 @@ class MTMathList {
         atoms.add(index, atom)
     }
 
-    fun append(list: MTMathList) {
+    internal fun append(list: MTMathList) {
         atoms.addAll(list.atoms)
     }
 
@@ -51,7 +51,7 @@ class MTMathList {
         return (this.toString())
     }
 
-    fun finalized(): MTMathList {
+    internal fun finalized(): MTMathList {
         val newList = MTMathList()
         val zeroRange = NSRange(0, 0)
 
@@ -107,7 +107,7 @@ class MTMathList {
         return newList
     }
 
-    fun copyDeep(): MTMathList {
+    internal fun copyDeep(): MTMathList {
         val newList = MTMathList()
         for (atom in this.atoms) {
             newList.addAtom(atom.copyDeep())

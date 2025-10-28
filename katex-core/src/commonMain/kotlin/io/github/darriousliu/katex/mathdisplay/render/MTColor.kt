@@ -2,7 +2,7 @@ package io.github.darriousliu.katex.mathdisplay.render
 
 import androidx.compose.ui.graphics.Color
 
-object MTColor {
+internal object MTColor {
     // 支持常用英文色名
     private val namedColors by lazy {
         mapOf(

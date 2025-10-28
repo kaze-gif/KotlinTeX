@@ -5,7 +5,7 @@ import io.github.darriousliu.katex.utils.readAssetFile
 /**
  * Each library is completely independent from the others; it is the root of a set of objects like fonts, faces, sizes, etc.
  */
-class Library(pointer: Long) : Pointer(pointer) {
+internal class Library(pointer: Long) : Pointer(pointer) {
     /**
      * Destroy the library object and all of it's childrens, including faces, sizes, etc.
      */

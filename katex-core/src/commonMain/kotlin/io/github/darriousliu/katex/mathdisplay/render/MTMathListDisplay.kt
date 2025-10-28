@@ -18,18 +18,18 @@ data class CGPoint(
     var y: Float = 0.0f
 )
 
-data class CGRect(
+internal data class CGRect(
     val x: Float = 0.0f,
     val y: Float = 0.0f,
     val width: Float = 0.0f,
     val height: Float = 0.0f
 )
 
-open class MTDisplay(
+open class MTDisplay internal constructor(
     open var ascent: Float = 0.0f,
     open var descent: Float = 0.0f,
     open var width: Float = 0.0f,
-    var range: NSRange = NSRange(),
+    internal var range: NSRange = NSRange(),
     var hasScript: Boolean = false
 ) {
 
@@ -98,7 +98,7 @@ open class MTDisplay(
 //        }
     }
 
-    fun displayBounds(): CGRect {
+    internal fun displayBounds(): CGRect {
         return CGRect(position.x, position.y - descent, width, ascent + descent)
     }
 
@@ -108,7 +108,7 @@ open class MTDisplay(
 // List of normal atoms to display that would be an attributed string on iOS
 // Since we do not allow kerning attribute changes this is a string displayed using the advances for the font
 // Normally this is a single character. In some cases the string will be fused atoms
-class MTCTLineDisplay(
+internal class MTCTLineDisplay(
     val str: String,
     range: NSRange,
     val font: MTFont,
@@ -195,7 +195,7 @@ enum class MTLinePosition {
     KMTLinePositionSuperscript
 }
 
-class MTMathListDisplay(
+class MTMathListDisplay internal constructor(
     displays: List<MTDisplay>,
     range: NSRange
 ) :
@@ -289,7 +289,7 @@ class MTMathListDisplay(
 
 // MTFractionDisplay
 
-class MTFractionDisplay(
+internal class MTFractionDisplay(
     var numerator: MTMathListDisplay,
     var denominator: MTMathListDisplay,
     range: NSRange
@@ -381,7 +381,7 @@ class MTFractionDisplay(
 // MTRadicalDisplay
 
 
-class MTRadicalDisplay(
+internal class MTRadicalDisplay(
     val radicand: MTMathListDisplay,
     val radicalGlyph: MTDisplay,
     range: NSRange
@@ -482,7 +482,7 @@ class MTRadicalDisplay(
 
 // MTGlyphDisplay
 
-class MTGlyphDisplay(
+internal class MTGlyphDisplay(
     val glyph: CGGlyph,
     range: NSRange,
     val myFont: MTFont
@@ -574,7 +574,7 @@ class MTGlyphConstructionDisplay(
 
 // MTLargeOpLimitsDisplay
 
-class MTLargeOpLimitsDisplay(
+internal class MTLargeOpLimitsDisplay(
     val nucleus: MTDisplay,
     var upperLimit: MTMathListDisplay?,
     var lowerLimit: MTMathListDisplay?,
@@ -688,7 +688,7 @@ class MTLargeOpLimitsDisplay(
 }
 
 // MTLineDisplay  overline or underline
-class MTLineDisplay(
+internal class MTLineDisplay(
     val inner: MTMathListDisplay,
     range: NSRange
 ) :
@@ -730,7 +730,7 @@ class MTLineDisplay(
 
 // MTAccentDisplay
 
-class MTAccentDisplay(
+internal class MTAccentDisplay(
     val accent: MTGlyphDisplay,
     val accentDisplay: MTMathListDisplay,
     range: NSRange

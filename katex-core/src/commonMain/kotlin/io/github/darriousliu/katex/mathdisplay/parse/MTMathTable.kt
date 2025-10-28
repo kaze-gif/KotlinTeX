@@ -5,7 +5,7 @@ package io.github.darriousliu.katex.mathdisplay.parse
 @typedef MTColumnAlignment
 @brief Alignment for a column of MTMathTable
  */
-enum class MTColumnAlignment {
+internal enum class MTColumnAlignment {
     /// Align left.
     KMTColumnAlignmentLeft,
 
@@ -16,7 +16,7 @@ enum class MTColumnAlignment {
     KMTColumnAlignmentRight
 }
 
-class MTMathTable() : MTMathAtom(MTMathAtomType.KMTMathAtomTable, "") {
+internal class MTMathTable() : MTMathAtom(MTMathAtomType.KMTMathAtomTable, "") {
 
 
     private var alignments = mutableListOf<MTColumnAlignment>()

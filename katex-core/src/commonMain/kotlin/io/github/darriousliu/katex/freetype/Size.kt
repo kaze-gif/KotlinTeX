@@ -1,6 +1,6 @@
 package io.github.darriousliu.katex.freetype
 
-class Size(pointer: Long) : Pointer(pointer) {
+internal class Size(pointer: Long) : Pointer(pointer) {
     val metrics: SizeMetrics?
         get() {
             val sizeMetrics = FreeType.sizeGetMetrics(pointer)

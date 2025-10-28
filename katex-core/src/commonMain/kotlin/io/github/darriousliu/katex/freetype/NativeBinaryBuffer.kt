@@ -1,6 +1,6 @@
 package io.github.darriousliu.katex.freetype
 
-expect class NativeBinaryBuffer {
+internal expect class NativeBinaryBuffer {
     val size: Int
 
     val short: Short
